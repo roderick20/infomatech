@@ -1,0 +1,182 @@
+﻿@model IEnumerable<SealWebRTC.Models.Meeting>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutClient";
+}
+
+
+@*@foreach (var item in Model)
+    {
+        var diff = DateTime.Now - item.MeetingDateBegin;
+
+            <div class="col-12 col-lg-6 mb-1">
+                <div class="alert alert-primary" role="alert">
+                    Usted tiene una cita programada<br />
+                    Hora de inicio: @item.MeetingDateBegin.ToString("yyyy-MM-dd HH:mm")<br />
+                    Hora de fin: @Convert.ToDateTime(item.MeetingDateEnd).ToString("yyyy-MM-dd HH:mm")<br />
+                    Tipo de atención: @item.TypeAttention.Name<br />
+
+                    @if (System.Math.Abs(diff.TotalMinutes) < 10 || item.Status == 2)
+        {
+                    <a href="/Client/EsperandoCita?UniqueId=@item.UniqueId" class=" btn btn-sm btn-outline-soft">Unirse a la sesión</a>
+                    }
+                </div>
+            </div>
+    }*@
+
+
+<div class="card border-light">
+    <div class="card-body">
+
+        <h2 class="page-title" style="font-size:2.5rem">Bienvenidos</h2>
+        <h4 class="page-title" style="font-size:1rem">al servicio Videollamada de SEAL</h4>
+        <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem;" />
+
+        @*<h5 class="card-title" style="font-size:1rem">Seleccione </h5>*@
+        <h5>Personas en espera @ViewBag.MeetingCount</h5>
+        <div class="row mt-5">
+            <div class="col-12 col-lg-8">
+
+                <div class="row">
+                    <div class="col-12 col-lg-6 text-center mb-2 ">
+                        <a class="btn animate-up-2 text-white" asp-controller="Client" asp-action="GenerateTicket" style="background-color: #005da4 !important;padding:25px;">
+                            <img src="~/document/Imagen Generar Ticket.png" class="img-fluid" width="70px" />
+                            <br /><span style="font-size: 1.5rem"><b>Generar Ticket</b></span>
+                        </a>
+                    </div>
+                    <div class="col-12 col-lg-6 text-center ">
+                        <a class="btn animate-up-2 text-white" asp-controller="Client" asp-action="ProgrammerMeeting" style="background-color: #005da4 !important; padding: 25px;">
+
+                            <img src="~/document/Imagen Programar Cita.png" class="img-fluid" width="70px" />
+                            <br /><span style="font-size: 1.5rem"><b>Programar Cita</b> </span>
+                        </a>
+                    </div>
+
+                    @if (Model.Count() > 0)
+                    {
+
+                        <div class="col-12">
+                            <div class="card border-light mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="font-size:1rem">Citas Programadas </h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    @*<th>Fecha</th>*@
+                                                    <th>Fecha Inicio</th>
+                                                    <th>Fecha Fin</th>
+                                                    <th>Tipo atención</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+
+                                                    <tr>
+                                                        @*<td>@item.Created.ToString("yyyy-MM-dd HH:mm")</td>*@
+                                                        <td>@item.MeetingDateBegin.ToString("yyyy-MM-dd HH:mm")</td>
+                                                        <td>@Convert.ToDateTime(item.MeetingDateEnd).ToString("yyyy-MM-dd HH:mm")</td>
+                                                        <td>@item.TypeAttention.Name</td>
+                                                        <td>
+                                                            @{
+                                                                var diff = DateTime.Now - item.MeetingDateBegin;
+                                                            }
+
+                                                            @if (System.Math.Abs(diff.TotalMinutes) < 10 || item.Status == 2)
+                                                            {
+                                                                <a href="/Client/EsperandoCita?UniqueId=@item.UniqueId" class="btn btn-sm btn-primary">Unirse a la sesión</a>
+                                                            }
+                                                        </td>
+                                                        <td><a href="/Client/CancelarCita2?UniqueId=@item.UniqueId" class="btn btn-sm btn-danger" onclick="clicked();">Cancelar cita</a></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 text-center mt-1">
+                <img src="~/document/Elige.png" class="img-fluid img-thumbnail" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="col-12 col-lg-3 mb-1">
+        <div class="card border-light ">
+            <div class="card-body">
+
+
+            </div>
+        </div>
+    </div>*@
+@*@if (Model.Count() > 0)
+    {
+
+        <div class="col-12">
+            <div class="card border-light mt-3">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size:1rem">Citas Programadas </h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Tipo atención</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Created.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@item.MeetingDateBegin.ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@Convert.ToDateTime(item.MeetingDateEnd).ToString("yyyy-MM-dd HH:mm")</td>
+                                        <td>@item.TypeAttention.Name</td>
+                                        <td>
+                                            @{
+                                                var diff = DateTime.Now - item.MeetingDateBegin;
+                                            }
+
+                                            @if (System.Math.Abs(diff.TotalMinutes) < 10 || item.Status == 2)
+                                            {
+                                                <a href="/Client/EsperandoCita?UniqueId=@item.UniqueId" class="btn btn-sm btn-primary">Unirse a la sesión</a>
+                                            }
+                                        </td>
+                                        <td><a href="/Client/CancelarCita2?UniqueId=@item.UniqueId" class="btn btn-sm btn-danger" onclick="clicked();">Cancelar cita</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }*@
+
+
+
+@section scripts {
+    <script>
+        function clicked() {
+            if (confirm('¿Realmente quieres cancelar tu cita?')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+} 

@@ -1,0 +1,277 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutClient";
+}
+
+
+@*<div class="row justify-content-center  d-none d-md-block d-lg-block d-xl-block">
+        <div class="col-12">
+            <div class="card border-light mb-3">
+                <div class="card-body px-5 py-5 text-center text-md-left">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h2 class="mb-3">Programación de cita</h2>
+                            <p class="mb-0 text-justify">
+                                Para poder programar una cita usted debe seleccionar un día y una hora,
+                                hacer clic y le aparecera un dialogo donde podra seleccionar el tipo de atención.
+                            </p>
+                            <a href="/MainClient" class="btn btn-sm btn-info animate-up-2">Regresar</a>
+                        </div>
+                        <div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
+                            <i class="fas fa-calendar-alt fa-5x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+        <div class="card border-light mb-3">
+            <div class="card-body py-5 text-center text-md-left">
+                <h2 class="mb-3">Programación de cita</h2>
+                <div id='calendar'></div>
+            </div>
+        </div>
+
+
+<div class="modal fade" id="modal-programmer" tabindex="-1" aria-labelledby="modal-default" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title">Programar Cita</h2>
+            </div>
+            <div class="modal-body">
+                <div class="mb-1">
+                    <label for="disabledTextInput">Hora de Inicio</label>
+                    <input type="text" id="hourBegin" class="form-control form-control-sm" placeholder="Disabled input" disabled="disabled">
+                </div>
+                <div class="mb-1">
+                    <label for="disabledTextInput">Hora de Fin</label>
+                    <input type="text" id="hourEnd" class="form-control form-control-sm" placeholder="Disabled input" disabled="disabled">
+                </div>
+                <div class="mb-1">
+                    <label for="disabledTextInput">Tipo de atención</label>
+                    <select class="form-select  form-control-sm" id="TypeAttentionId">
+                        <option selected disabled>SELECCIONE TIPO DE ATENCIÓN</option>
+                        @foreach (var item in ViewBag.Attentions)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn btn-sm btn-primary" type="button" id="btnAddEvent">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i> Agregar
+                </button>
+                <button class="btn btn-sm btn-primary" type="button" id="Save2" style="display:none" disabled>
+                    <i class="fa fa-spinner fa-spin fa-fw"></i> Grabando...
+                </button>
+
+                @*<button type="button" class="btn btn-sm btn-primary" id="btnAddEvent">Agregar</button>
+                <button type="button" class="btn btn-sm btn-danger ml-auto" data-bs-dismiss="modal">Cancelar</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+<table id="tblEvents" style="display:none;">
+    <tbody>
+        @foreach (var item in ViewBag.Meetings)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.MeetingDateBegin.ToString("yyyy-MM-ddTHH:mm")</td>
+                <td>@item.MeetingDateEnd.ToString("yyyy-MM-ddTHH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div id="mensaje" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                @*<p>
+                        ESTIMADO CLIENTE: EL DÍA DE SU CITA PROGRAMADA, SI USTED NO INGRESA EN LA HORA INDICADA Y/O DENTRO DEL
+                        TIEMPO DE TOLERANCIA (10MIN), SU CITA SE CONSIDERARA ABANDONADA Y DEBERÁ PROGRAMAR UNA NUEVA CITA O GENERAR
+                        UN TICKET PARA PODER SER ATENDIDO
+                    </p>*@
+                <img src="~/document/Recomendaciones en Citas.png" class="img-fluid" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <link href="~/lib/fullcalendar/main.css" rel="stylesheet" />
+    <script src="~/lib/fullcalendar/main.js"></script>
+    <script src="~/lib/fullcalendar/locales-all.js"></script>
+
+    <style>
+        @@media (max-width: 544px) {
+            .fc .fc-toolbar-title {
+                font-size: 1em;
+                margin: 0;
+            }
+        }
+
+        .fc-timegrid-event-harness {
+            height: 40px !important;
+        }
+
+        .fc .fc-timegrid-slot {
+            height: 3em;
+            border-bottom: 0;
+        }
+    </style>
+
+    <script>
+
+        var hourBegin, hourEnd;
+        var calendar;
+        var _event;
+        $("#btnAddEvent").click(function () {
+
+            $("#btnAddEvent").hide();
+            $("#Save2").show();
+
+            var datestring = hourBegin.getFullYear() + "-" + ("0" + (hourBegin.getMonth() + 1)).slice(-2) + "-" + ("0" + hourBegin.getDate()).slice(-2) +
+                " " + ("0" + hourBegin.getHours()).slice(-2) + ":" + ("0" + hourBegin.getMinutes()).slice(-2);
+
+            var datestring2 = hourEnd.getFullYear() + "-" + ("0" + (hourEnd.getMonth() + 1)).slice(-2) + "-" + ("0" + hourEnd.getDate()).slice(-2) +
+                " " + ("0" + hourEnd.getHours()).slice(-2) + ":" + ("0" + hourEnd.getMinutes()).slice(-2);
+
+            if ($("#TypeAttentionId option:selected").val() == "SELECCIONE TIPO DE ATENCIÓN") {
+                alert("Seleccione Tipo de Atención");
+                return;
+            }
+
+
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "/Client/ProgrammerMeetingSave",
+                    data: {
+                        MeetingDateBegin: datestring,
+                        MeetingDateEnd: datestring2,
+                        TypeAttentionId: $("#TypeAttentionId option:selected").val()
+                    },
+                    success: function (response) {
+
+                        $("#btnAddEvent").show();
+                        $("#Save2").hide();
+
+                        if (response == "ok") {
+
+                            var datestring = hourBegin.getFullYear() + "-" + ("0" + (hourBegin.getMonth() + 1)).slice(-2) + "-" + ("0" + hourBegin.getDate()).slice(-2) +
+                                "T" + ("0" + hourBegin.getHours()).slice(-2) + ":" + ("0" + hourBegin.getMinutes()).slice(-2);
+
+                            var datestring2 = hourEnd.getFullYear() + "-" + ("0" + (hourEnd.getMonth() + 1)).slice(-2) + "-" + ("0" + hourEnd.getDate()).slice(-2) +
+                                "T" + ("0" + hourEnd.getHours()).slice(-2) + ":" + ("0" + hourEnd.getMinutes()).slice(-2);
+
+                            console.log(datestring);
+                            console.log(datestring2);
+
+
+
+                            calendar.addEvent({
+                                //id: 1,
+                                //title: 'X',
+                                start: datestring,
+                                end: datestring2,
+                                //allDay: true
+                            });
+
+                            $("#mensaje").modal('show')
+                        }
+                        else {
+                            alert(response);
+                        }
+
+                        $('#modal-programmer').modal('hide');
+                    }
+                });
+
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'es-us',
+                initialView: 'timeGridWeek',
+                slotMinTime: '09:00',
+                slotMaxTime: '16:00',
+                allDaySlot: false,
+                hiddenDays: [0, 6],
+                height: 550,
+                slotDuration: '00:15:00',
+
+                eventClick: function (jsEvent, view, info) {
+                    console.log(info);
+                    var d = jsEvent.event.start;
+                    //_event = jsEvent;
+
+                    hourBegin = d;
+                    var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
+                        d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+
+                    var d2 = new Date(jsEvent.event.start.getTime() + 15 * 60000);
+                    hourEnd = d2;
+                    var datestring2 = ("0" + d2.getDate()).slice(-2) + "-" + ("0" + (d2.getMonth() + 1)).slice(-2) + "-" +
+                        d2.getFullYear() + " " + ("0" + d2.getHours()).slice(-2) + ":" + ("0" + d2.getMinutes()).slice(-2);
+
+                    $("#hourBegin").val(datestring);
+                    $("#hourEnd").val(datestring2);
+
+                    $('#modal-programmer').modal('show');
+
+                },
+
+                dateClick: function (info) {
+                    var d = info.date;
+                    hourBegin = d;
+                    var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
+                        d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+
+                    var d2 = new Date(info.date.getTime() + 15 * 60000);
+                    hourEnd = d2;
+                    var datestring2 = ("0" + d2.getDate()).slice(-2) + "-" + ("0" + (d2.getMonth() + 1)).slice(-2) + "-" +
+                        d2.getFullYear() + " " + ("0" + d2.getHours()).slice(-2) + ":" + ("0" + d2.getMinutes()).slice(-2);
+
+                    $("#hourBegin").val(datestring);
+                    $("#hourEnd").val(datestring2);
+
+                    $('#modal-programmer').modal('show');
+                }
+            });
+            calendar.render();
+
+            $('#tblEvents tr').each(function (index, element) {
+
+                calendar.addEvent({
+                    //id: 1,
+                    title: 'Cita',
+                    start: $(this).children().eq(1).text(),
+                    end: $(this).children().eq(2).text(),
+                    //allDay: true
+                });
+
+            });
+
+            //calendar.updateSize();
+
+
+        });
+
+    </script>
+
+
+}

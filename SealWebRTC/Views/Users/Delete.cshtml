@@ -1,0 +1,37 @@
+﻿@model SealWebRTC.Models.User
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "_LayoutNew";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h4 class="card-title mb-4 text-danger">Eliminar usuario</h4>
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Nombre
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.FirstName)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Apellido
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.LastName)
+                    </dd>
+                </dl>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Eliminar" class="btn btn-sm btn-danger" /> |
+                    <a asp-action="Index" class="btn btn-sm btn-info">Regresar lista</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

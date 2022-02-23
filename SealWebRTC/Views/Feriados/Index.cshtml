@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SealWebRTC.Models.Feriado>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutNew";
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-header">
+                <div class="float-end">
+                    <a asp-action="Create" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Agregar feriado</a>
+                </div>
+                <div class="float-start col-sm-3">
+                    <h3 class="card-title">Feriados</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table id="list" class="table table-sm table-bordered" style="font-size:0.875rem">
+                    <thead>
+                        <tr>
+                            <th>
+                                Fecha
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @item.Fecha.ToString("yyyy-MM-dd")
+                            </td>
+
+                            <td>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                            </td>
+                            
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,109 @@
+﻿@model SealWebRTC.Models.Meeting
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_LayoutNew";
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Cita</h4>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Cliente
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Model.UserClient.FirstName @Model.UserClient.LastName
+                    </dd>
+                    @*<dt class="col-sm-2">
+                            Gestor
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.UserManagerNavigation.FirstName @Model.UserManagerNavigation.LastName
+                        </dd>*@
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Created)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Tipo atención
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Model.TypeAttention.Name
+                    </dd>
+                </dl>
+                @{
+                    var local = "/uploads/" + @Model.UniqueId + "_local.webm";
+                    var partner = "/uploads/" + @Model.UniqueId + "_partner.webm";
+                }
+                <div class="row">
+                    <div class="col-6">
+                        <div class=" embed-responsive embed-responsive-4by3 card p-2">
+                            <video class="embed-responsive-item" id="js-video-super" controls src="https://seal-videos.s3.us-west-2.amazonaws.com/@Model.UserManager.AccessKeyId/@Model.PeerClient/archive.mp4" type="video/webm">
+                            </video>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="mb-1">
+                            <span class="h5">Chat</span>
+                        </div>
+                        <div class="mb-5">
+                            <div class="row">
+                                <div class="col-6 text-left">Gestor</div>
+                                <div class="col-6 text-right">Cliente</div>
+                            </div>
+                            <div style="height: 300px; width: 100%; border: 1px solid #ddd;  overflow-y: scroll;">
+
+                                @foreach (var item in Model.Messages)
+                                {
+                                    if (item.UserId == Model.UserClientId)
+                                    {
+                                        <div class="text-right m-1 pr-1" style="background: #f1f1f1;border: 1px solid #ddd;border-radius: 4px;">@Html.Raw(item.MessageText) <span style="font-size:10px;">@item.MessageDate.Hour:@item.MessageDate.Minute</span></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="m-1 pl-1" style="border: 1px solid #ddd;border-radius:4px;text-align: right;">
+                                            <span style="        font-size: 10px;
+
+">@item.MessageDate.Hour:@item.MessageDate.Minute</span> @Html.Raw(item.MessageText)
+</div>
+}
+}
+                            </div>
+
+                        </div>
+
+                        <div class="mb-1 mt-2">
+                            <span class="h5">Archivos</span>
+                        </div>
+                        <div class="mb-5">
+                            <table class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Archives)
+                                    {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td class="text-center"><a href="@item.Path"><i class="fas fa-download"></i></a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

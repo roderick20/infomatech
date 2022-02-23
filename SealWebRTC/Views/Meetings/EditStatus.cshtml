@@ -1,0 +1,52 @@
+﻿@model SealWebRTC.Models.Meeting
+
+@{
+    ViewData["Title"] = "Cambio de Estado";
+
+    Layout = "_LayoutNew";
+}
+
+
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+
+            <div class="card-body">
+
+                <h4 class="card-title mb-4">Editar Estado</h4>
+
+                <form asp-action="EditStatus">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" value="@Model.Id"/>
+                    <input type="hidden" asp-for="UniqueId" value="@Model.UniqueId" />
+
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label">Estado</label>
+
+                        <select asp-for="Status" class="form-select form-select-sm  ">
+                            <option value="0">Programada</option>
+                            <option value="1">Espera</option>
+                            <option value="2">Atencion</option>
+                            <option value="3">Cerrado</option>
+                            <option value="4">Anulado</option>
+                        </select>
+
+
+                    </div>
+                    <div class="form-group mt-1">
+                        <input type="submit" value="Grabar" class="btn btn-sm btn-primary" />
+                        <a asp-action="Index" class="btn btn-sm btn-info">Regresar a lista</a>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

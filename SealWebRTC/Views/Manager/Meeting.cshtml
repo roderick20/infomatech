@@ -1,0 +1,454 @@
+﻿@model SealWebRTC.Models.Meeting
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutManager";
+}
+
+<input type="hidden" id="UniqueId" value="@Model.UniqueId" />
+<input type="hidden" id="UserUniqueId" value="@Model.UserClient.UniqueId" />
+<input type="hidden" id="ChannelName" value="@ViewBag.ChannelName" />
+<input type="hidden" id="AccessKeyId" value="@ViewBag.AccessKeyId" />
+<input type="hidden" id="SecretAccessKey" value="@ViewBag.SecretAccessKey" />
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <nav class="navbar navbar-light bg-primary justify-content-between text-white rounded mb-3">
+                            <span style="margin-left: 10px;">Cliente: @Model.UserClient.FirstName @Model.UserClient.LastName</span>
+                        </nav>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-6 col-xl-6 mt-1">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6 mt-1">
+                                <div id="publisher"></div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6 mt-1">
+                                <div id="subscribers"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-md-6 col-lg-6 col-xl-6 mt-1">
+                        <div id="parentMsgs" style="overflow-y: scroll;height: 200px;">
+                            <div id="messageChat" style="height: 200px;width: 500px;border: 1px solid #ccc;display: table-cell; vertical-align: bottom;">
+                                @if (ViewBag.Messages != null)
+                                {
+                                    foreach (var item in ViewBag.Messages)
+                                    {
+                                        if (item.UserId == ViewBag.UserManagerId)
+                                        {
+                                            <div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;"><b> @Html.Raw(item.MessageText)   <span style="font-size:10px;">@item.MessageDate.ToString("HH:mm")</span></b></div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-right" style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;">  @Html.Raw(item.MessageText) <span style="font-size:10px;"> @item.MessageDate.ToString("HH:mm") </span></div>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="row">
+                                <div class="col-7 col-md-6 col-lg-6 col-xl-6">
+                                    <input class="form-control form-control-sm border border-light-gray mb-2" id="txtChat" placeholder="Mensaje" required="" />
+                                </div>
+                                <div class="col-5 col-md-6 col-lg-6 col-xl-6">
+                                    <button id="btnChat" class="btn btn-sm btn-primary"><i class="far fa-envelope"></i><span class="d-none d-sm-inline"> Enviar</span></button>
+                                    <button id="btnUpload" class="btn btn-sm btn-primary"><i class="fas fa-paperclip"></i><span class="d-none d-sm-inline"> Adjuntar</span> </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <div>
+                            <input type='text' id='js-myself-id' placeholder='ID' style="display:none;">
+                            <span id='js-peer-id' style="display:none;"></span>
+                            <button id='js-open' style="display:none;">Obtener ID</button>
+                            <input disabled type='text' id='js-partner-id' placeholder='ID Remoto' style="display:none;">
+                            @*<button disabled id='js-connect' class="btn btn-sm btn-primary">Esperando al cliente</button>
+                                <button id="record" class="btn btn-sm btn-primary">Finalizar Atención y Grabar</button>*@
+                            <button class="btn btn-danger btn-sm start">Iniciar Grabación</button>
+                            <button class="btn btn-success btn-sm stop">Detener Grabación</button>
+
+                            <button id="shareScreem" onclick="ScreenShare()" class="btn btn-sm btn-primary">Compartir Pantalla</button>
+                            @*<button id="mute" class="btn btn-primary" style="padding-top: 0.3rem;padding-bottom: 0.3rem;"><i class="fas fa-microphone"></i></button>
+                                <button id="videoDiaplay" class="btn btn-primary" style="padding-top: 0.3rem;padding-bottom: 0.3rem;"><i class="fas fa-video"></i></button>*@
+                            @*<br />
+                                Tiempo: <span id="time">
+                                </span><br />
+                                Tamaño: <span id="size">
+                                </span><br />
+                                <br />*@
+                            @*<a href="/Manager/Salas" class="btn btn-sm btn-primary" onclick="return confirm('¿Esta seguro que quiere salir de la reunion?')">Menú principal</a>*@
+                            <a href="/Manager/CancelarCita?UniqueId=@Model.UniqueId" class="btn btn-sm btn-danger" onclick="return confirm('¿Esta seguro que quiere salir de la reunion?')">Cancelar Cita</a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalUpload" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>*@
+            <div class="modal-body">
+                <input id="files" name="files" type="file" size="1" onchange="uploadFiles('files');" class="form-control" />
+                <i id="spinUpload" class="fas fa-spinner fa-spin"></i>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                @*<button type="button" class="btn btn-sm btn-primary">Grabar</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @*<script src="~/lib/peerjs.min.js"></script>
+        @*<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    *@
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+
+
+
+    @*<script src="~/lib/RecordRTC.js"></script>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.585.0.min.js"></script>
+        <script src="https://unpkg.com/@@ungap/url-search-params"></script>
+        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+        <script src="https://unpkg.com/amazon-kinesis-video-streams-webrtc/dist/kvs-webrtc.min.js"></script>*@
+
+    @*<script src="~/webrtc/master.js"></script>*@
+
+    <script>
+        var sessionId = "@ViewBag.SessionId";
+        var apiKey = "@ViewBag.ApiKey";
+        var token = "@ViewBag.Token";
+    </script>
+
+
+
+    <script>
+
+        var session = OT.initSession(apiKey, sessionId),
+            publisher = OT.initPublisher('publisher'),
+            archiveID = null;
+
+        session.connect(token, function (error) {
+            $.ajax({
+                type: "POST",
+                url: "/Manager/InitMeeting",
+                data: {
+                    UniqueId: $("#UniqueId").val(),
+                    PeerManager: "clientId",
+                    sessionId: sessionId,
+                    apiKey: apiKey,
+                    token: token
+                },
+                success: function (response) {
+                }
+            });
+
+
+            if (error) {
+
+                console.error('Failed to connect', error);
+            } else {
+                session.publish(publisher, function (error) {
+                    if (error) {
+                        console.error('Failed to publish', error);
+                    }
+
+                    $("video").prop("controls", true);
+                });
+            }
+        });
+
+        session.on('streamCreated', function (event) {
+
+            session.subscribe(event.stream, 'subscribers', {
+                insertMode: 'append'
+            }, function (error) {
+
+                if (error) {
+                    console.error('Failed to subscribe', error);
+                }
+                //$("video").prop("controls", true);
+            });
+        });
+
+        session.on('archiveStarted', function (event) {
+            archiveID = event.id;
+            console.log('ARCHIVE STARTED');
+            $('.start').hide();
+            $('.stop').show();
+
+        });
+
+        session.on('archiveStopped', function (event) {
+            archiveID = null;
+            console.log('ARCHIVE STOPPED');
+            $('.start').show();
+            $('.stop').hide();
+
+        });
+
+        function ScreenShare() {
+            var publisher = OT.initPublisher('screen-preview',
+                { videoSource: 'screen' },
+                function (error) {
+                    if (error) {
+                        // Look at error.message to see what went wrong.
+                    } else {
+                        session.publish(publisher, function (error) {
+                            if (error) {
+                                // Look error.message to see what went wrong.
+                            }
+                        });
+                    }
+                }
+            );
+        }
+
+        /*var record = document.getElementById('record');
+        record.onclick = function () {
+
+
+            var formData = new FormData();
+            formData.append("OpenTokSessionId", sessionId);
+            formData.append("MeetingUniqueId", $("#UniqueId").val());
+
+            $.ajax({
+                url: "/Manager/SaveVideosLocal",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+
+                        $("#record").html('Grabancion terminada');
+
+                }
+            });
+
+        }*/
+        $(document).ready(function () {
+            $('.start').click(function (event) {
+
+                var formData = new FormData();
+                formData.append("OpenTokSessionId", sessionId);
+
+                $.ajax({
+                    url: "/Manager/Start",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+
+                        //$("#record").html('Grabancion terminada');
+
+                    }
+                });
+
+            }).show();
+
+
+
+
+
+            $('.stop').click(function (event) {
+
+                var formData = new FormData();
+                formData.append("archiveID", archiveID);
+                formData.append("MeetingUniqueId", $("#UniqueId").val());
+
+                $.ajax({
+                    url: "/Manager/Stop",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+
+                        $("#record").html('Grabancion terminada');
+                        window.location.replace("/Manager/Salas");
+                    }
+                });
+
+            }).hide();
+        });
+
+
+        ////////////////////////////////////////////////////////////////////////////////
+        connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+
+        connection.start().then(function () {
+            console.log("init");
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("InitManagerMeeting", function (UniqueId, PeerManager) {
+            console.log(UniqueId);
+            /*if ($("#UniqueId").val() == UniqueId) {
+                $("#js-partner-id").val(PeerManager);
+                $("#js-connect").html("Conectar");
+
+            }*/
+        });
+
+        connection.on("ReceiveMessage", function (group, user, message) {
+
+            var userlocal = document.getElementById("UserUniqueId").value;
+            var grouplocal = document.getElementById("UniqueId").value;
+            if (grouplocal == group) {
+                if (userlocal != user) {
+                    $("#messageChat").append('<div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;text-align: right;"><b>' + message + ' ' + getTime() + '</b></div>');
+                    $('#parentMsgs').scrollTop($('#parentMsgs').prop("scrollHeight"));
+                }
+            }
+        });
+
+        $(document).on('keypress', function (e) {
+            if (e.which == 13) {
+                var message = document.getElementById("txtChat").value;
+                $("#messageChat").append('<div class="text-right" style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;">' + message + ' ' + getTime() + '</div>');
+                $('#parentMsgs').scrollTop($('#parentMsgs').prop("scrollHeight"));
+
+                document.getElementById("txtChat").value = "";
+                var group = document.getElementById("UniqueId").value;
+                var user = document.getElementById("UserUniqueId").value;
+                //
+                connection.invoke("SendMessage", group, user, message).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            }
+        });
+
+        document.getElementById("btnChat").addEventListener("click", function (event) {
+            var message = document.getElementById("txtChat").value;
+
+            $("#messageChat").append('<div class="text-right" style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;">' + message + ' ' + getTime() + '</div>');
+            document.getElementById("txtChat").value = "";
+            var group = document.getElementById("UniqueId").value;
+            var user = document.getElementById("UserUniqueId").value;
+            //
+            connection.invoke("SendMessage", group, user, message).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+
+        document.getElementById("btnUpload").addEventListener("click", function (event) {
+            $('#spinUpload').hide();
+            $('#modalUpload').modal('show');
+        });
+
+        connection.on("GetFiles", function (UserUniqueId, MeetingUniqueId) {
+
+            var formData2 = new FormData();
+            formData2.append("UserUniqueId", UserUniqueId);
+            formData2.append("MeetingUniqueId", MeetingUniqueId);
+
+            $("#tblFiles tbody").html("");
+            $.ajax({
+                url: "/Manager/GetFiles",
+                data: formData2,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $("#tblFiles tbody").append('<tr>' +
+                            '<td>' + value.created + '</td>' +
+                            '<td>' + value.name + '</td>' +
+                            '<td class="text-center"><a href="' + value.path + '"><i class="fas fa-download"></i></a></td></tr>');
+                    });
+                }
+            });
+        });
+
+        function uploadFiles(inputId) {
+
+            $('#spinUpload').show();
+
+            var input = document.getElementById(inputId);
+            var files = input.files;
+            var formData = new FormData();
+            formData.append("file", files[0]);
+
+
+            formData.append("UserUniqueId", $("#UserUniqueId").val());
+            formData.append("MeetingUniqueId", $("#UniqueId").val());
+
+            var formData2 = new FormData();
+            formData2.append("UserUniqueId", $("#UserUniqueId").val());
+            formData2.append("MeetingUniqueId", $("#UniqueId").val());
+
+            $.ajax({
+                url: "/Client/AddFile",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+
+                    var message = '<a  target="_blank" href="' + data + '">' + files[0].name + '<i class="fas fa - download"></i></a>';
+                    $("#messageChat").append('<div class="card  border-light pr-1 ml-md-5 ml-lg-6 mb-1"><p class="m-0 text-right"><a  target="_blank" href="' + data + '">' + files[0].name + '<i class="fas fa-download"></i></a></p></div>');
+                    document.getElementById("txtChat").value = "";
+                    var group = document.getElementById("UniqueId").value;
+                    var user = document.getElementById("UserUniqueId").value;
+                    connection.invoke("SendMessage", group, user, message).catch(function (err) {
+                        return console.error(err.toString());
+                    });
+                    $('#modalUpload').modal('hide');
+                }
+            });
+        }
+
+        $("#mute").click(function () {
+            if (ismute) {
+
+                $("#mute").removeClass("btn-danger").addClass("btn-primary");
+                $("#mute").html('<i class="fas fa-microphone"></i>');
+                ismute = false;
+                publisher.publishAudio(true);
+
+            }
+            else {
+
+                $("#mute").removeClass("btn-primary").addClass("btn-danger");
+                $("#mute").html('<i class="fas fa-microphone-slash"></i>');
+                ismute = true;
+                publisher.publishAudio(false);
+
+            }
+        });
+
+
+        function getTime() {
+            var d = new Date();
+            var t = (d.getHours() < 10 ? '0' + d.getHours() : d.getHours()) + ":" + (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes());
+            return '<span style="font-size:10px;">' + t + '</span>'
+        }
+
+    </script>
+}

@@ -1,0 +1,189 @@
+﻿@model IEnumerable<SealWebRTC.Models.Meeting>
+@{
+    Layout = "_LayoutManager";
+}
+
+@*<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">UI Elements</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Admin Kit</a></li>
+                    <li class="breadcrumb-item active">UI Elements</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>*@
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Citas</h4>
+                <div class="table-responsive">
+                    <table id="list" class="table table-sm table-bordered" style="font-size: 0.875rem;">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Cliente
+                                </th>
+                                <th>
+                                    Tipo de atención
+                                </th>
+                                <th>Ticket / Programada</th>
+                                <th>Puntaje</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Created.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @item.UserClient.FirstName @item.UserClient.LastName
+                                    </td>
+                                    <td>
+                                        @item.TypeAttention.Name
+                                    </td>
+                                    <td>
+                                        @{
+                                            var type = item.Type == 1 ? "Ticket" : "Programada";
+                                        }
+                                        @type
+                                    </td>
+                                    <td class="text-right">
+                                        @{
+                                            var score = ((Convert.ToDouble(item.Score) * 100) / 5).ToString("0.00");
+                                        }
+                                        @score
+                                    </td>
+                                    <td>
+                                        <a asp-action="CitaDetalle" asp-route-id="@item.Id">Detalle</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    @*<link href="~/select2/css/select2.css" rel="stylesheet" />
+    <script src="~/select2/js/select2.js"></script>*@
+
+
+
+    <link href="~/yadcf/jquery.dataTables.yadcf.css" rel="stylesheet" />
+    <script src="~/yadcf/jquery.dataTables.yadcf.js"></script>
+
+    <link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatable/datatables.min.js"></script>
+
+    <link href="~/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <script src="~/jquery-ui/jquery-ui.js"></script>
+
+    @*<link href="~/yadcf/select2.css" rel="stylesheet" />
+    <script src="~/yadcf/select2.js"></script>*@
+    <style>
+        .yadcf-filter {
+            font-size: 0.875rem !important;
+            border-radius: 4px;
+            box-shadow: none;
+        }
+
+        .yadcf-filter-reset-button {
+            position: relative;
+            /*transition: all 0.2s ease;*/
+            font-size: 0.875rem;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #0576b9;
+            border-color: #0576b9;
+        }
+
+        .yadcf-filter-range-date {
+            font-size: 0.875rem;
+            border-radius: 4px;
+        }
+
+        .yadcf-filter-wrapper-inner {
+            border: 0;
+        }
+    </style>
+
+
+    <script>
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $(document).ready(function () {
+            $('#list').dataTable({
+                "language": {
+                    "url": "/lib/datatable/spanish.json"
+                },
+            })
+            .yadcf([
+                {
+                    column_number: 0,
+                    filter_type: "range_date",
+                    date_format: "dd/mm/yyyy",
+                },
+                {
+                    column_number: 1,
+                    filter_type: "auto_complete",
+                    filter_default_label: ''
+                    //select_type_options: {
+                    //    width: '150px',
+                    //    minimumResultsForSearch: -1 // remove search box
+                    //}
+                    //select_type: 'chosen'
+                },
+                {
+                    column_number: 2,
+                    filter_type: "select",
+                    filter_default_label: ''
+                    //select_type: 'chosen'
+                },
+                {
+                    column_number: 3,
+                    filter_type: "select",
+                    filter_default_label: ''
+                    //select_type: 'chosen'
+                }
+            ]);
+        });
+    </script>
+}

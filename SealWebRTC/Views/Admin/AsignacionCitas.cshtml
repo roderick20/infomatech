@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "_LayoutNew";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Asignación de citas</h4>
+
+                <div class="card-body py-4 px-0">
+                    <table id="list" class="table table-sm table-bordered" style="font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Gestor
+                                </th>
+                                <th>
+                                    Cliente
+                                </th>
+                                <th>
+                                    Cliente Email
+                                </th>
+                                <th>
+                                    Tipo de atención
+                                </th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Atenciones)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.MeetingDateBegin
+                                    </td>
+                                    <td>
+                                        @if (item.UserManager != null)
+                                        {
+                                            <span>@item.UserManager.FirstName @item.UserManager.LastName</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.UserClient.FirstName @item.UserClient.LastName
+                                    </td>
+                                    <td>
+                                        @item.UserClient.Email
+                                    </td>
+                                    <td>
+                                        @item.TypeAttention.Name
+                                    </td>
+
+
+                                    <td>
+                                        <a asp-action="AsignarGestor" asp-route-mettingId="@item.Id">Asignar Gestor</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatable/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                "language": {
+                    "url": "/lib/datatable/spanish.json"
+                },
+            });
+        });
+    </script>
+}

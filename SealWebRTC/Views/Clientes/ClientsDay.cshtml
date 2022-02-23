@@ -1,0 +1,95 @@
+﻿@model IEnumerable<SealWebRTC.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutNew";
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-header">
+                <div class="float-start col-sm-3">
+                    <h3 class="card-title">Registro de clientes x día</h3>
+                </div>
+                <div class="float-end">
+                    <a asp-action="Index" class="btn btn-sm btn-info">
+                        <i class="fas fa-reply"></i> Regresar
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <table id="list" class="table table-sm table-bordered" style="font-size:0.875rem">
+                    <thead>
+                        <tr>
+                            <th>
+                                Fecha de Registro
+                            </th>
+                            <th>
+                                Cantidad Usuarios
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <link href="~/lib/datatable_excel/datatables.css" rel="stylesheet" />
+    <script src="~/lib/datatable_excel/datatables.js"></script>
+
+    <link href="~/lib/datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+    <script src="~/lib/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+
+    <link href="~/yadcf/jquery.dataTables.yadcf.css" rel="stylesheet" />
+    <script src="~/yadcf/jquery.dataTables.yadcf.js"></script>
+
+    <style>
+        input[name=Periodo1] {
+            width: 90px !important;
+        }
+
+        input[name=Periodo2] {
+            width: 90px !important;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+            var table = $('#list').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "order": [[0, "asc"]],
+                "select": true,
+                "ajax": {
+                    "url": "ClientsDayData",
+                    "type": "POST",
+                    "data": {}
+                },
+                "columns": [
+                    { "data": "Fecha" },
+                    { "data": "Cantidad" }
+                ],
+                "language": {
+                    "url": "/lib/datatable/spanish.json"
+                }
+            });
+
+        });
+
+    </script>
+
+}

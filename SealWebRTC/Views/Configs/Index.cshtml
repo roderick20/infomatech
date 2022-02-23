@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SealWebRTC.Models.Config>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutNew";
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-header">                
+                <div class="float-start col-sm-3">
+                    <h3 class="card-title">Configuración</h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table id="list" class="table table-sm table-bordered" style="font-size:0.875rem">
+                    <thead>
+                        <tr>
+                            <th>
+                                Parametro
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @item.Key
+                            </td>
+                            <td>
+                                @item.Value
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                            </td>
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

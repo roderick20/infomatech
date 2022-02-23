@@ -1,0 +1,192 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+<header id="page-topbar" style="background-color: #005da4; border-color: #005da4;">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="#" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="~/theme/assets/img/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="~/theme/assets/img/logo.svg" alt="" height="23">
+                    </span>
+                </a>
+
+                <a href="#" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="~/theme/assets/img/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="~/theme/assets/img/logo.svg" alt="" height="23">
+                    </span>
+                </a>
+            </div>
+
+            <button type="button" class="btn btn-sm px-3 font-size-16 vertinav-toggle header-item waves-effect" id="vertical-menu-btn">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+
+            <button type="button" class="btn btn-sm px-3 font-size-16 horinav-toggle header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+
+
+        </div>
+
+        <div class="d-flex">
+
+
+
+
+
+            @*<div class="dropdown d-inline-block ms-1">
+                    <a type="button" class="btn header-item noti-icon waves-effect" href="/ChangeDark?path=@Context.Request.Path">
+                        @if (ViewBag.Theme == "dark")
+                        {
+                            <i class="fas fa-moon" style="font-size: 15px;margin-top: 15px;"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-moon" style="font-size: 15px;margin-top: 15px;"></i>
+                        }
+                    </a>
+                </div>*@
+
+            <div class="dropdown d-none d-lg-inline-block ms-1">
+                <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+                    <i class="mdi mdi-fullscreen"></i>
+                </button>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
+                    <i class="mdi mdi-account-circle  text-muted align-middle me-1" style="font-size:32px;"></i>
+                    <span class="d-none d-xl-inline-block ms-1">@HttpContextAccessor.HttpContext.Session.GetString("Name")</span>
+                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+
+                    <a class="dropdown-item" href="/Admin/ChangePassword"><i class="mdi mdi-key-chain text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Cambio de contraseña</span></a>
+                    <a class="dropdown-item" href="/Logout"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Salir</span></a>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</header>
+<div class="topnav">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+            <div class="collapse navbar-collapse" id="topnav-menu-content">
+                <ul class="navbar-nav">
+
+
+                    @*@foreach (var menu in resources.Where(m => m.ParentId == null).OrderBy(m => m.Position))
+                        {
+                            @if (menu.MenuAction == (int)AppTemplate.Helper.EnumMenuHeaderAction.MenuDropdown)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-advancedkit" role="button">
+                                        <i class="bx bxs-grid me-2"></i><span key="t-advancedkit">@menu.Name</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-advancedkit">
+                                        @foreach (var menu2 in resources.Where(m => m.ParentId == menu.Id).OrderBy(m => m.Position))
+                                        {
+                                            <a asp-area="@menu2.AreaName" asp-controller="@menu2.ControllerName" asp-action="@menu2.ActionName" class="dropdown-item" key="t-sweet-alert">@menu2.Name</a>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="@menu.AreaName" asp-controller="@menu.ControllerName" asp-action="@menu.ActionName">
+                                        <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">@menu.Name</span>
+                                    </a>
+                                </li>
+                            }
+                        }*@
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-advancedkit" role="button">
+                            <i class="bx bxs-grid me-2"></i><span key="t-advancedkit">Menú</span> <div class="arrow-down"></div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="topnav-advancedkit">
+
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-tachometer-alt" style="color: #f8cc39"></i> DashBoard</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Users" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-users" style="color: #f8cc39"></i> Usuarios</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Clientes" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-users" style="color: #f8cc39"></i> Registro de clientes</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Meetings" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-video" style="color: #f8cc39"></i> Archivo de Atenciones</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="ReportByDateAndUser">
+                                <span class="nav-link-inner-text"><i class="fas fa-file-excel" style="color: #f8cc39"></i> Reportes de atenciones</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="ReportByDateAndScore">
+                                <span class="nav-link-inner-text"><i class="fas fa-file-excel" style="color: #f8cc39"></i> Reportes de Gestores</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="ReportByDateAndAtention">
+                                <span class="nav-link-inner-text"><i class="fas fa-file-excel" style="color: #f8cc39"></i> Reportes de tipo de atenciones</span>
+                            </a>
+
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="AsignacionCitas">
+                                <span class="nav-link-inner-text"><i class="fas fa-indent" style="color: #f8cc39"></i> Asignación de Citas</span>
+                            </a>
+                            <a class="dropdown-item" asp-controller="Feriados" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-indent" style="color: #f8cc39"></i> Feriados</span>
+                            </a>
+                            <a class="dropdown-item" asp-controller="Configs" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-indent" style="color: #f8cc39"></i> Configuración</span>
+                            </a>
+
+                            @*<a href="advanced-sweet-alert.html" class="dropdown-item" key="t-sweet-alert">Sweet-Alert</a>
+        <a href="advanced-rangeslider.html" class="dropdown-item" key="t-range-slider">Range Slider</a>
+        <a href="advanced-notifications.html" class="dropdown-item" key="t-notifications">Notifications</a>
+        <a href="advanced-carousel.html" class="dropdown-item" key="t-carousel">Carousel</a>*@
+                        </div>
+                    </li>
+
+                    @*<li class="nav-item">
+                            <a class="nav-link" href="/Auth/Users">
+                                <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">Usuaris</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Auth/Roles">
+                                <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">Roles</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Auth/Menus">
+                                <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">Menu</span>
+                            </a>
+                        </li>*@
+
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>

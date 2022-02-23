@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var themeNew = "";
+    //if (HttpContextAccessor.HttpContext.Session.GetString("IsThemeDark") == "True")
+    //{
+    //    themeNew = "dark";
+    //}
+
+}
+<!DOCTYPE html>
+<html lang="es-pe">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <title>Videollamada | SEAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Videollamada | SEAL" name="description" />
+    <meta content="Roderick Cusirramos Montesinos, Agile Corporation E.I.R.L." name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+    <link href="https://public-agile.s3.us-west-2.amazonaws.com/style.min.css" rel="stylesheet" type="text/css" />
+    <link href="/themeNew/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGD6M0PQLD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-FGD6M0PQLD');
+    </script>
+</head>
+
+<!--   data-layout-mode="@@themeNew"  -->
+<body data-topbar="dark" data-layout="horizontal" data-layout-mode="@themeNew">
+
+
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        @await Component.InvokeAsync("Menu")
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                    @RenderBody()
+
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <script>document.write(new Date().getFullYear())</script> © SEAL 2021.
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                Ventanilla Virtual
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- end main content-->
+
+    </div>
+
+    <!-- bundle -->
+    <!-- JAVASCRIPT -->
+    <script src="https://public-agile.s3.us-west-2.amazonaws.com/script.min.js"></script>
+
+    <!-- App js -->
+    <script src="~/themeNew/js/app.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

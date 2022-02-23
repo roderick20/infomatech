@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "_LayoutManager";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-5">Personas en espera - Tickets Generados</h4>
+                <ul class="list-unstyled news-list" id="SalaEspera">
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    @*<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>*@
+
+    <script>
+        GetSalas();
+        setInterval(function () { GetSalas(); }, 2000);
+
+        /*var connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+
+        connection.on("AddTicket", function (user, message) {
+            GetSalas();
+        });
+
+        connection.start().then(function () {
+            console.log("AddTicket1");
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });*/
+
+        function GetSalas() {
+            $("#SalaEspera").html('');
+            $.ajax({
+                type: 'POST',
+                url: '/Manager/GetSalas',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var count = 0;
+                    $.each(result, function (index, value) {
+                        if (count == 0) {
+                            $("#SalaEspera").append(`<li class="row mx-0 mb-1">
+                                                                <a href="#" class="col-2">
+                                                                    <img src="/document/imagen_espera.png" alt="Designer desk" class="rounded img-fluid">
+                                                                </a>
+                                                                <div class="col-9">
+                                                                    <a>
+                                                                        <h2 class="h6 mb-1">Tipo de atencion: `+ value.attention + `</h2>
+                                                                    </a>
+                                                                    <div class="post-meta font-small">
+                                                                        <span class="far fa-user mr-2"></span>Cliente: `+ value.client + `<br/>
+                                                                        <span class="far fa-file-archive mr-2"></span>Número: `+ count + `<br/>
+                                                                        <span class="far fa-clock mr-2"></span>Fecha: `+ value.created + `  <br />
+                                                                        <a href="/Manager/Meeting?UniqueId=`+ value.uniqueId + `" class="btn btn-sm btn-primary text-white">Iniciar Sesión</a>
+                                                                    </div>
+                                                                </div>
+                                                                </li>`);
+                        }
+                        else {
+                            $("#SalaEspera").append(`<li class="row mx-0 mb-1">
+                                                                <a href="#" class="col-2">
+                                                                    <img src="/document/imagen_espera.png" alt="Designer desk" class="rounded img-fluid">
+                                                                </a>
+                                                                <div class="col-9">
+                                                                    <a>
+                                                                        <h2 class="h6 mb-1">Tipo de atencion:`+ value.attention + `</h2>
+                                                                    </a>
+                                                                    <div class="post-meta font-small">
+                                                                        <span class="far fa-user mr-2"></span>Cliente: `+ value.client + `<br/>
+                                                                        <span class="far fa-file-archive mr-2"></span>Número: `+ count + `<br/>
+                                                                        <span class="far fa-clock mr-2"></span>Fecha: `+ value.created + `  <br />
+                                                                    </div>
+                                                                </div>
+                                                                </li>`);
+                        }
+                        count++;
+
+                    });
+                }
+            });
+        }
+    </script>
+}

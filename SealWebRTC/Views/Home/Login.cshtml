@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutPublic";
+}
+<div class="row justify-content-center  mt-5">
+    <div class="col-md-10">
+        <div class="card overflow-hidden mt-5">
+            <div class="row g-0">
+                <div class="col-lg-6">
+                    <div id="example-div" class=" d-block d-lg-none  d-flex aligns-items-center justify-content-center">
+                        <img src="https://public-agile.s3.us-west-2.amazonaws.com/logo_seal.svg" id="logo-principal" class="img-fluid" width="50%" />
+                    </div>
+                    <form asp-action="Login" id="formLogin" class=" p-4">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="mb-3">
+                            <label for="username" class="fw-semibold">Correo electónico</label>
+                            <input type="email" class="form-control" placeholder="Correo electrónico" id="email" name="email" required="">
+                        </div>
+                        <div class="mb-3 mb-4">
+                            <label for="userpassword" class="fw-semibold">Contraseña</label>
+                            <input type="password" placeholder="Contraseña" class="form-control" id="password" name="password" required="">
+                        </div>
+                        <div class="mb-3 mb-4">
+                            <div class="input-group ">
+                                <input type="text" class="form-control" placeholder="Ingrese código" name="captchaCode" maxlength="4" autocomplete="off" style="text-transform: uppercase" required />
+                                <div class="input-group-prepend">
+                                    <img id="img-captcha" src="/get-captcha-image" style="height: 2.4rem !important;" />
+                                </div>
+                                <div class="input-group-append">
+                                    <span id="img-captcha-b" class="btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                        <svg style="color: white; height: .875rem; margin-bottom: 0.2rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt" class="svg-inline--fa fa-sync-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"></path></svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-3" style="padding: 8px;">
+                                <a href="/Register" class="text-muted"><b>Registrarse</b></a>
+                            </div>
+                            <div class="col-5" style="padding: 8px;">
+                                <a href="/RecoveryPassword" class="text-muted"><b>Recuperar Contraseña</b></a>
+                            </div>
+                            <div class="col-4 text-end">
+                                <button class="btn btn-primary w-md waves-effect waves-light" type="submit">
+                                    <svg style="color: white; height: .875rem; margin-bottom: 0.2rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sign-in-alt" class="svg-inline--fa fa-sign-in-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 448h-84c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h84c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32h-84c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h84c53 0 96 43 96 96v192c0 53-43 96-96 96zm-47-201L201 79c-15-15-41-4.5-41 17v96H24c-13.3 0-24 10.7-24 24v96c0 13.3 10.7 24 24 24h136v96c0 21.5 26 32 41 17l168-168c9.3-9.4 9.3-24.6 0-34z"></path></svg>
+                                    Ingresar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <div class="px-lg-5 h-100 d-none d-lg-block img-thumbnail">
+                        <img src="https://public-agile.s3.us-west-2.amazonaws.com/logo_seal.svg" id="logo-principal" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#img-captcha-b").click(function () {
+                d = new Date();
+                $("#img-captcha").attr("src", "/get-captcha-image?" + d.getTime());
+            });
+        });
+    </script>
+}

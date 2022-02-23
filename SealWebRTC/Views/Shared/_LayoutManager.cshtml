@@ -1,0 +1,150 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var themeNew = "";
+    //if (HttpContextAccessor.HttpContext.Session.GetString("IsThemeDark") == "True")
+    //{
+    //    themeNew = "dark";
+    //}
+
+}
+<!DOCTYPE html>
+<html lang="es-pe">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <title>Videollamada | SEAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Videollamada | SEALr" name="description" />
+    <meta content="Roderick Cusirramos Montesinos, Agile Corporation E.I.R.L." name="author" />
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    
+    <link href="/themeNew/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/theme/vendor/@@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+
+    <link href="https://public-agile.s3.us-west-2.amazonaws.com/style.min.css" rel="stylesheet" type="text/css" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGD6M0PQLD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-FGD6M0PQLD');
+    </script>
+</head>
+
+<!--   data-layout-mode="@@themeNew"  -->
+<body data-topbar="dark" data-layout="horizontal" data-layout-mode="@themeNew">
+
+    <div id="layout-wrapper">
+        <header id="page-topbar" style="background-color: #005da4; border-color: #005da4;">
+            <div class="navbar-header">
+                <div class="d-flex">
+                    <div class="navbar-brand-box">
+                        <a href="#" class="logo">
+                            <img src="~/theme/assets/img/logo_seal.png" alt="" height="55">
+                        </a>
+                    </div>
+                    <button type="button" class="btn btn-sm px-3 font-size-16 vertinav-toggle header-item waves-effect" id="vertical-menu-btn">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm px-3 font-size-16 horinav-toggle header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+                </div>
+
+                <div class="d-flex">
+                    @*<div class="dropdown d-inline-block ms-1">
+                            <a type="button" class="btn header-item noti-icon waves-effect" href="/ChangeDark?path=@Context.Request.Path">
+                                @if (ViewBag.Theme == "dark")
+                                {
+                                    <i class="fas fa-moon" style="font-size: 15px;margin-top: 15px;"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-moon" style="font-size: 15px;margin-top: 15px;"></i>
+                                }
+                            </a>
+                        </div>*@
+                    <div class="dropdown d-none d-lg-inline-block ms-1">
+                        <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+                            <i class="mdi mdi-fullscreen"></i>
+                        </button>
+                    </div>
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="mdi mdi-account-circle  text-muted align-middle me-1" style="font-size:32px;"></i>
+                            <span class="d-none d-xl-inline-block ms-1">@HttpContextAccessor.HttpContext.Session.GetString("Name")</span>
+                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="/Manager/ChangePassword"><i class="mdi mdi-key-chain text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Cambio de contraseña</span></a>
+                            <a class="dropdown-item" href="/Logout"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Salir</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="topnav">
+            <div class="container-fluid">
+                <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+                    <div class="collapse navbar-collapse" id="topnav-menu-content">
+                        <ul class="navbar-nav">
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Manager" asp-action="Salas">
+                                    <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">Tickets Generados</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Manager" asp-action="CitaProgramadas">
+                                    <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">Citas Programadas</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Manager" asp-action="Cita">
+                                    <i class="bx bxs-dashboard me-2"></i><span key="t-dashboards">Atenciones</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <script>document.write(new Date().getFullYear())</script> © SEAL 2021.
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                Ventanilla Virtual
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/themeNew/libs/jquery/jquery.min.js"></script>
+    <script src="~/themeNew/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/themeNew/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/themeNew/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/themeNew/libs/node-waves/waves.min.js"></script>*@
+
+    <script src="~/themeNew/js/app.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

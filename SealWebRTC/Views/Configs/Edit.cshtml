@@ -1,0 +1,36 @@
+﻿@model SealWebRTC.Models.Config
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_LayoutNew";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Editar Configuracion</h4>
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden"  asp-for="Id" />
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">@Model.Key</label>
+                        <div class="col-sm-4">
+                            <input type="text" asp-for="Value" class="form-control" required />
+                            <span asp-validation-for="Value" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <a asp-action="Index" class="btn btn-gray"><i class="fas fa-arrow-left"></i> Regresar</a>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Grabar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

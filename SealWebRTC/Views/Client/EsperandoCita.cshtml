@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutClient";
+}
+
+<div class="section mt-5" style="min-height:500px;">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 col-lg-6">
+                <div class="card border-light ">
+                    <div class="card-body">
+                        <h5 class="card-title">Esperando al gestor</h5>
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        <input type="hidden" id="UniqueId" value="@ViewBag.UniqueId" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+    <script>
+        //----------------------------------------------------------------------------------------
+        var connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+
+        connection.start().then(function () {
+            console.log("init");
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        /*connection.on("InitMeeting", function (UniqueId, PeerManager) {
+            console.log("InitMeeting");
+            console.log($("#UniqueId").val());
+            console.log(UniqueId);
+            console.log(PeerManager);
+            if ($("#UniqueId").val() == UniqueId) {
+
+                window.location.replace("/Client/Meeting?UniqueId=" + UniqueId + "&PeerManager=" + PeerManager);
+            }
+            //GetSalas();
+        });*/
+
+        connection.on("InitMeeting", function (UniqueId, PeerManager, sessionId, apiKey, token) {
+            console.log("InitMeeting");
+            console.log($("#UniqueId").val());
+            console.log(UniqueId);
+            console.log(PeerManager);
+            if ($("#UniqueId").val() == UniqueId) {
+
+                window.location.replace("/Client/Meeting?UniqueId=" + UniqueId + "&PeerManager=" + PeerManager + "&sessionId=" + sessionId + "&apiKey=" + apiKey + "&token=" + token);
+            }
+            //GetSalas();
+        });
+
+            //--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+    </script>
+} 

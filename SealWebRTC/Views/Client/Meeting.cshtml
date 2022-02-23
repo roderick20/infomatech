@@ -1,0 +1,265 @@
+﻿@model SealWebRTC.Models.Meeting
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutClient";
+}
+
+<input type="hidden" id="UniqueId" value="@Model.UniqueId" />
+<input type="hidden" id="UserUniqueId" value="@Model.UserManager.UniqueId" />
+<input type="hidden" id="PeerManager" value="@ViewBag.PeerManager" />
+<input type="hidden" id="ChannelName" value="@ViewBag.ChannelName" />
+<input type="hidden" id="AccessKeyId" value="@ViewBag.AccessKeyId" />
+<input type="hidden" id="SecretAccessKey" value="@ViewBag.SecretAccessKey" />
+
+<div class="card">
+    <div class="card-body">
+        <div class="row mb-5">
+            <div class="col-12">
+                <nav class="navbar navbar-light bg-primary justify-content-between text-white rounded mb-3">
+                    <span style="margin-left: 10px;">Gestor: @Model.UserManager.FirstName @Model.UserManager.LastName</span>
+                </nav>
+            </div>
+            <div class="col-12 col-md-8 col-lg-8 col-xl-8 mt-1">
+                <div class="row" style="text-align:center;padding-left: 10px;">
+                    <div class="col-12 col-md-6 col-lg-6 col-xl-6 mt-1" style="border: 1px solid #ccc;padding:2px;border-radius: 3px;">
+                        <div id="publisher"></div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6 col-xl-6 mt-1" style="border: 1px solid #ccc;padding:2px;border-radius: 3px;">
+                        <div id="subscribers"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <a href="/Client/Score?UniqueId=@Model.UniqueId" class="btn btn-sm btn-primary" onclick="return confirm('¿Esta seguro que quiere salir de la reunion?')">Terminar</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-12 col-md-4 col-lg-4 col-xl-4 mt-1">
+                <div id="parentMsgs" style="overflow-y: scroll;height: 350px;">
+                    <div id="messageChat" style="height: 350px;width: 500px;border: 1px solid #ccc;display: table-cell; vertical-align: bottom;">
+                        <div style="margin: 2px; padding: 2px; text-align: center;"><img src="~/document/Sealito Hola.png" alt="" style="width:50%;"></div>
+                        <div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;"><b> Bienvenidos a Video Llamada de seal</b></div>
+
+
+
+                        @if (ViewBag.Messages != null)
+                        {
+                            foreach (var item in ViewBag.Messages)
+                            {
+                                if (item.UserId == ViewBag.UserManagerId)
+                                {
+                                    <div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;"><b> @Html.Raw(item.MessageText)   <span style="font-size:10px;">@item.MessageDate.ToString("HH:mm")</span></b></div>
+                                }
+                                else
+                                {
+                                    <div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;">  @Html.Raw(item.MessageText) <span style="font-size:10px;"> @item.MessageDate.ToString("HH:mm") </span></div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="row">
+                        <div class="col-7 col-md-6 col-lg-6 col-xl-6">
+                            <input class="form-control form-control-sm border border-light-gray mb-2" id="txtChat" placeholder="Mensaje" required="" />
+                        </div>
+                        <div class="col-5 col-md-6 col-lg-6 col-xl-6">
+                            <button id="btnChat" class="btn btn-sm btn-primary"><i class="far fa-envelope"></i><span class="d-none d-sm-inline"> Enviar</span></button>
+                            <button id="btnUpload" class="btn btn-sm btn-primary"><i class="fas fa-paperclip"></i><span class="d-none d-sm-inline"> Adjuntar</span> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalUpload" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input id="files" name="files" type="file" size="1" onchange="uploadFiles('files');" class="form-control" />
+                <i id="spinUpload" class="fas fa-spinner fa-spin"></i>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+
+    <script>
+        var sessionId = "@ViewBag.SessionId";
+        var apiKey = "@ViewBag.ApiKey";
+        var token = "@ViewBag.Token";
+    </script>
+
+    <script>
+
+        var session = OT.initSession(apiKey, sessionId),
+            publisher = OT.initPublisher('publisher', { width: '100%', height: '400px' });
+
+        session.connect(token, function (error) {
+            if (error) {
+                console.error('Failed to connect', error);
+            } else {
+                session.publish(publisher, function (error) {
+                    if (error) {
+                        console.error('Failed to publish', error);
+                    }
+                    //$("video").prop("controls", true);
+                });
+            }
+        });
+
+        session.on('streamCreated', function (event) {
+            session.subscribe(event.stream, 'subscribers', {
+                insertMode: 'append',  width: '100%', height: '400px'
+            }, function (error) {
+                if (error) {
+                    console.error('Failed to subscribe', error);
+                    }
+                    $("video").prop("controls", true);
+            });
+        });
+
+         //-----------------------------------------------------------------------------------------
+        $(function () {
+            connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+
+            connection.start().then(function () {
+                console.log("init");
+
+            }).catch(function (err) {
+                return console.error(err.toString());
+            });
+
+            connection.on("ReceiveMessage", function (group, user, message) {
+                var userlocal = document.getElementById("UserUniqueId").value;
+                var grouplocal = document.getElementById("UniqueId").value;
+                if (grouplocal == group) {
+                    if (userlocal != user) {
+                        $("#messageChat").append('<div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;text-align: right;"><b>' + message + ' ' + getTime()+'</b></div>');
+                        $('#parentMsgs').scrollTop($('#parentMsgs').prop("scrollHeight"));
+                    }
+                }
+            });
+
+            connection.on("FinishMeeting", function () {
+
+                window.location.replace("/Client/Score?UniqueId=@Model.UniqueId");
+                //var userlocal = document.getElementById("UserUniqueId").value;
+                //var grouplocal = document.getElementById("UniqueId").value;
+                //if (grouplocal == group) {
+                //    if (userlocal != user) {
+                //        $("#messageChat").append('<div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;"><b>' + message + ' ' + getTime() + '</b></div>');
+                //        $('#parentMsgs').scrollTop($('#parentMsgs').prop("scrollHeight"));
+                //    }
+                //}
+            });
+
+            document.getElementById("btnChat").addEventListener("click", function (event) {
+                var message = document.getElementById("txtChat").value;
+                $("#messageChat").append('<div style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;">' + message + ' ' + getTime() + '</div>');
+                $('#parentMsgs').scrollTop($('#parentMsgs').prop("scrollHeight"));
+                document.getElementById("txtChat").value = "";
+                var group = document.getElementById("UniqueId").value;
+                var user = document.getElementById("UserUniqueId").value;
+                connection.invoke("SendMessage", group, user, message).catch(function (err) {
+                    return console.error(err.toString());
+                });
+                event.preventDefault();
+            });
+
+            $(document).on('keypress', function (e) {
+                if (e.which == 13) {
+                    var message = document.getElementById("txtChat").value;
+                    $("#messageChat").append('<div class="text-right" style="border: 1px solid #ccc;margin:2px;padding:2px;border-radius: 3px;">' + message + ' ' + getTime() + '</div>');
+                    $('#parentMsgs').scrollTop($('#parentMsgs').prop("scrollHeight"));
+
+                    document.getElementById("txtChat").value = "";
+                    var group = document.getElementById("UniqueId").value;
+                    var user = document.getElementById("UserUniqueId").value;
+                    //
+                    connection.invoke("SendMessage", group, user, message).catch(function (err) {
+                        return console.error(err.toString());
+                    });
+                }
+            });
+
+
+            document.getElementById("btnUpload").addEventListener("click", function (event) {
+                $('#spinUpload').hide();
+                $('#modalUpload').modal('show');
+            });
+
+
+
+
+
+        });
+        //----------------------------------------------------------------------------------------------------------------------
+        function uploadFiles(inputId) {
+
+            $('#spinUpload').show();
+
+            var input = document.getElementById(inputId);
+            var files = input.files;
+            var formData = new FormData();
+
+            //for (var i = 0; i != files.length; i++) {
+            formData.append("file", files[0]);
+            //}
+
+            formData.append("UserUniqueId", $("#UserUniqueId").val());
+            formData.append("MeetingUniqueId", $("#UniqueId").val());
+
+            var formData2 = new FormData();
+            formData2.append("UserUniqueId", $("#UserUniqueId").val());
+            formData2.append("MeetingUniqueId", $("#UniqueId").val());
+
+            $.ajax({
+                url: "/Client/AddFile",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (data) {
+
+                    var message = '<a  target="_blank" href="' + data + '">' + files[0].name + '<i class="fas fa - download"></i></a>';
+                    $("#messageChat").append('<div class="card  border-light pr-1 ml-md-5 ml-lg-6 mb-1"><p class="m-0 text-right"><a  target="_blank" href="' + data + '">' + files[0].name + '<i class="fas fa-download"></i></a></p></div>');
+                    document.getElementById("txtChat").value = "";
+                    var group = document.getElementById("UniqueId").value;
+                    var user = document.getElementById("UserUniqueId").value;
+                    connection.invoke("SendMessage", group, user, message).catch(function (err) {
+                        return console.error(err.toString());
+                    });
+                    $('#modalUpload').modal('hide');
+
+
+
+
+
+
+                }
+            });
+        }
+
+function getTime() {
+            var d = new Date();
+            var t = (d.getHours() < 10 ? '0' + d.getHours() : d.getHours()) + ":" + (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes());
+            return '<span style="font-size:10px;">' + t + '</span>'
+        }
+
+
+    </script>
+}

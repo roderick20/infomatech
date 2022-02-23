@@ -1,0 +1,106 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Client\ChangePassword.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Admin\AsignacionCitas.cshtml" />
+    <None Include="Views\Admin\AsignarGestor.cshtml" />
+    <None Include="Views\Admin\ChangePassword.cshtml" />
+    <None Include="Views\Admin\DashBoard.cshtml" />
+    <None Include="Views\Admin\Index.cshtml" />
+    <None Include="Views\Admin\ReportByDateAndAtention.cshtml" />
+    <None Include="Views\Admin\ReportByDateAndScore.cshtml" />
+    <None Include="Views\Admin\ReportByDateAndUser.cshtml" />
+    <None Include="Views\Admin\Supervicion.cshtml" />
+    <None Include="Views\Clientes\Index.cshtml" />
+    <None Include="Views\Client\ChangePassword.cshtml" />
+    <None Include="Views\Client\DocumentosPresentados.cshtml" />
+    <None Include="Views\Client\EsperandoCita.cshtml" />
+    <None Include="Views\Client\GenerateTicket.cshtml" />
+    <None Include="Views\Client\HistorialAtenciones.cshtml" />
+    <None Include="Views\Client\Index.cshtml" />
+    <None Include="Views\Client\Meeting.cshtml" />
+    <None Include="Views\Client\PaginaInvalidad.cshtml" />
+    <None Include="Views\Client\Perfil.cshtml" />
+    <None Include="Views\Client\ProgrammerMeeting.cshtml" />
+    <None Include="Views\Client\Score.cshtml" />
+    <None Include="Views\Gestor\Create.cshtml" />
+    <None Include="Views\Gestor\Delete.cshtml" />
+    <None Include="Views\Gestor\Details.cshtml" />
+    <None Include="Views\Gestor\Edit.cshtml" />
+    <None Include="Views\Gestor\Index.cshtml" />
+    <None Include="Views\Home\ChangePassword.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Home\Login.cshtml" />
+    <None Include="Views\Home\Privacy.cshtml" />
+    <None Include="Views\Home\RecoveryPassword.cshtml" />
+    <None Include="Views\Home\Register.cshtml" />
+    <None Include="Views\Manager\ChangePassword.cshtml" />
+    <None Include="Views\Manager\Cita.cshtml" />
+    <None Include="Views\Manager\CitaDetalle.cshtml" />
+    <None Include="Views\Manager\CitaProgramadas.cshtml" />
+    <None Include="Views\Manager\Index.cshtml" />
+    <None Include="Views\Manager\Meeting.cshtml" />
+    <None Include="Views\Manager\Salas.cshtml" />
+    <None Include="Views\Meetings\Create.cshtml" />
+    <None Include="Views\Meetings\Delete.cshtml" />
+    <None Include="Views\Meetings\Details.cshtml" />
+    <None Include="Views\Meetings\Edit.cshtml" />
+    <None Include="Views\Meetings\EditStatus.cshtml" />
+    <None Include="Views\Meetings\Index.cshtml" />
+    <None Include="Views\Shared\Components\Menu\Default.cshtml" />
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <None Include="Views\Shared\_LayoutClient.cshtml" />
+    <None Include="Views\Shared\_LayoutManager - Copia.cshtml" />
+    <None Include="Views\Shared\_LayoutManager.cshtml" />
+    <None Include="Views\Shared\_LayoutNew.cshtml" />
+    <None Include="Views\Shared\_LayoutPublic.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Views\TypeAttentions\Create.cshtml" />
+    <None Include="Views\TypeAttentions\Delete.cshtml" />
+    <None Include="Views\TypeAttentions\Details.cshtml" />
+    <None Include="Views\TypeAttentions\Edit.cshtml" />
+    <None Include="Views\TypeAttentions\Index.cshtml" />
+    <None Include="Views\Users\Create.cshtml" />
+    <None Include="Views\Users\Delete.cshtml" />
+    <None Include="Views\Users\Details.cshtml" />
+    <None Include="Views\Users\Edit.cshtml" />
+    <None Include="Views\Users\Index.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="ClosedXML.Extensions.Mvc" Version="0.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+    <PackageReference Include="OpenTok" Version="3.6.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.2" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Logs\" />
+  </ItemGroup>
+
+</Project>

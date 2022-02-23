@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="es-pe">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <title>Videollamada | SEAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Videollamada | SEAL" name="description" />
+    <meta content="Roderick Cusirramos Montesinos, Agile Corporation E.I.R.L." name="author" />
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link href="https://public-agile.s3.us-west-2.amazonaws.com/style.min.css" rel="stylesheet" type="text/css" />
+    
+    <link href="/themeNew/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/theme/vendor/@@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGD6M0PQLD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-FGD6M0PQLD');
+    </script>
+</head>
+<body data-sidebar="dark" style="background: rgba(0, 0, 0, 0) url(/theme/assets/img/pages/form-image.jpg) no-repeat scroll 0% 0%;">
+    <div class="account-pages my-5 pt-sm-5">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="https://public-agile.s3.us-west-2.amazonaws.com/script.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

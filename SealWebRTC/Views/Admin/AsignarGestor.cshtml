@@ -1,0 +1,57 @@
+﻿@model SealWebRTC.Models.Meeting
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_LayoutNew";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Asignación de cita</h4>
+
+
+                <form asp-action="AsignarGestor">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" name="mettingId" value="@Model.Id" />
+
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            Cliente
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.UserClient.FirstName @Model.UserClient.LastName
+                        </dd>
+                        <dt class="col-sm-2">
+                            Fecha de la cita
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.MeetingDateBegin)
+                        </dd>
+                        <dt class="col-sm-2">
+                            Tipo atención
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Model.TypeAttention.Name
+                        </dd>
+                        <dt class="col-sm-2">
+                            Agregar Gestor
+                        </dt>
+                        <dd class="col-sm-5">
+                            <select name="userId" class="form-select form-select-sm" asp-items="ViewBag.UserId"></select>
+                        </dd>
+                        <dt class="col-sm-2">
+                        </dt>
+                        <dd class="col-sm-7 text-right">
+                            <input type="submit" value="Asignar" class="btn btn-sm btn-primary" />
+                        </dd>
+                    </dl>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

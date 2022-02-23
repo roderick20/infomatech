@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seal - Ventanilla Virtual</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" id="favicon" />
+    <link href="~/theme/css/pixel.css" rel="stylesheet" />
+    <link href="~/theme/css/style.css" rel="stylesheet" />
+    <link href="~/theme/vendor/@@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+
+</head>
+<body>
+    <header class="header-global">
+        <nav id="navbar-main" aria-label="Primary navigation"
+             class="navbar navbar-main navbar-expand-lg navbar-theme-primary headroom navbar-dark" style="background-color:#005da4  !important ">
+            <div class="container position-relative">
+                <a class="navbar-brand mr-lg-5" href="#">
+                    <img class="navbar-brand-dark" src="~/theme/assets/img/logo.svg" alt="Seal">
+                    <img class="navbar-brand-light" src="~/theme/assets/img/logo_azul.png" alt="Seal">
+                </a>
+                <div class="navbar-collapse collapse" id="navbar_global">
+                    <div class="navbar-collapse-header">
+                        <div class="row">
+                            <div class="col-6 collapse-brand">
+                                <a href="./index.html#features">
+                                    <img src="~/theme/assets/img/logo_azul.png" alt="Seal">
+                                </a>
+                            </div>
+                            <div class="col-6 collapse-close">
+                                <a href="#navbar_global" class="fas fa-times" data-toggle="collapse"
+                                   data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+                                   aria-label="Toggle navigation"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" asp-controller="Manager" asp-action="Salas">
+                                <span class="nav-link-inner-text">Tickets Generados</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" asp-controller="Manager" asp-action="CitaProgramadas">
+                                <span class="nav-link-inner-text">Citas Programadas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" asp-controller="Manager" asp-action="Cita">
+                                <span class="nav-link-inner-text">Atenciones</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item  d-block d-sm-none">
+                            <a href="/Manager/ChangePassword" class="nav-link"><i class="fas fa-lock"></i> Cambio de contraseña </a>
+                        </li>
+                        <li class="nav-item  d-block d-sm-none">
+                            <a href="/Logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> Salir </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex align-items-center">
+                    @*<div class="btn-group ml-md-3 d-none d-md-block d-lg-block d-xl-block">
+                        <button type="button" class="btn btn-outline-soft dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menú <span class="fas fa-angle-down dropdown-arrow"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" style="">
+
+
+                            <a class="nav-link" asp-controller="Admin" asp-action="DashBoard">
+                                <span class="nav-link-inner-text"><i class="fas fa-tachometer-alt" style="color: #f8cc39"></i> DashBoard</span>
+                            </a>
+
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-inner-text"><i class="fas fa-users" style="color: #f8cc39"></i> Usuarios</span>
+                            </a>
+
+                            <a class="nav-link" asp-controller="Meetings" asp-action="Index">
+                                <span class="nav-link-inner-text"><i class="fas fa-video" style="color: #f8cc39"></i> Atenciones</span>
+                            </a>
+
+                           
+
+
+
+                        </div>
+                    </div>*@
+
+                    <div class="btn-group ml-md-3 d-none d-md-block d-lg-block d-xl-block">
+                        <button type="button" class="btn btn-outline-soft"><span class="fas fa-user"></span> @HttpContextAccessor.HttpContext.Session.GetString("Name")</button><button type="button" class="btn btn-outline-soft dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="fas fa-angle-down dropdown-arrow"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" href="/Manager/ChangePassword" style="font-size:1rem !important;"><i class="fas fa-lock"></i> Cambio de contraseña</a>
+                        </div>
+                    </div>
+                    <a class="btn btn-tertiary ml-md-3 text-white d-none d-md-block d-lg-block d-xl-block" style="background-color: #742a58; border-color: #6e2753;" href="/Logout">CERRAR SESIÓN <i class="fas fa-sign-out-alt"></i></a>
+                    <button class="navbar-toggler ml-2" type="button" data-toggle="collapse"
+                            data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="footer pt-4 pb-3 text-white" style="position: fixed; left: 0; bottom: 0; width: 100%; color: white; text-align: center;z-index:1000;background-color:#005da4 !important ">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    2021 - SEAL
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

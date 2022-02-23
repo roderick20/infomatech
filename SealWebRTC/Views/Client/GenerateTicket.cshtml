@@ -1,0 +1,400 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutClient";
+}
+
+<style>
+    /*.card-deck {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+
+        .card-deck .card {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-flex: 1;
+            -ms-flex: 1 0 0%;
+            flex: 1 0 0%;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            margin-right: 15px;
+            margin-bottom: 0;
+            margin-left: 15px;
+        }*/
+</style>
+
+
+
+
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card-group">
+            @if (ViewBag.Meeting != null)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Seleccione tipo de atención</h5>
+                        <form asp-action="GenerateTicket">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="mb-3">
+                                <p class="text-justify">
+                                    Estimado Cliente: Al agregar su ticket usted estará ingresando a una cola de
+                                    espera donde será atendido en el tiempo estimado que se indica en pantalla.
+                                </p>
+                                <select class="form-select form-select-sm" id="TypeAttentionId" name="TypeAttentionId">
+                                    <option value="0" selected disabled>SELECCIONE TIPO DE ATENCIÓN</option>
+                                    @foreach (var item in ViewBag.Attentions)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <a href="/MainClient" class="btn btn-sm btn-info animate-up-2">Regresar</a>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <input class="btn btn-sm btn-secondary animate-up-2" type="submit" onclick="return valid();" value="Generar Ticket">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card ">
+                    <div class="card-body pt-5 pb-5">
+
+                        <p class="text-center">
+                            <i class="fas fa-exclamation-circle text-danger" style="font-size:25px"></i>
+                        </p>
+                        <p class="text-justify">
+
+                            ESTIMADO CLIENTE: AL HABER GENERADO SU TICKET, PASADO EL TIEMPO DE ESPERA, SE LE ASIGNARÁ UN GESTOR DE ATENCIÓN.
+
+                        </p>
+                        <p class="text-justify">
+
+                          EN CASO USTED ESTE AUSENTE Y/O NO RESPONDA AL LLAMADO, SU TICKET SERÁ ABANDONADO Y DEBERÁ GENERAR NUEVAMENTE UN TICKET PARA VOLVER A INICIAR SU ATENCIÓN.
+                        </p>
+
+                    </div>
+                </div>
+            }
+            else
+            {
+            <div class="row mb-5">
+                <div class="col-12 col-lg-9">
+
+                    @if (ViewBag.FueraHora == null)
+                    {
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Seleccione tipo de atención</h5>
+                                <form asp-action="GenerateTicket">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="mb-3">
+                                        <p class="text-justify">
+                                            Estimado Cliente: Al agregar su ticket usted estará ingresando a una cola de
+                                            espera donde será atendido en el tiempo estimado aue se indica en pantalla.
+                                        </p>
+                                        <select class="form-select form-select-sm" id="TypeAttentionId" name="TypeAttentionId">
+                                            <option value="0" selected disabled>SELECCIONE TIPO DE ATENCIÓN</option>
+                                            @foreach (var item in ViewBag.Attentions)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 text-center">
+                                            <a href="/MainClient" class="btn btn-sm btn-info animate-up-2">Regresar</a>
+                                        </div>
+                                        <div class="col-6 text-center">
+                                            <input class="btn btn-sm btn-secondary animate-up-2" type="submit" onclick="return valid();" value="Generar Ticket">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card" style="min-width:300px;">
+                            <div class="card-body">
+                                <h5 class="card-title">@ViewBag.FueraHora</h5>
+                                
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            }
+
+        </div>
+
+        <div class="card-group">
+
+            @if (ViewBag.Meeting != null)
+            {
+                <div class="card border-light mt-3 ">
+                    <div class="card-body row">
+                        <div class="col-12 col-lg-8">
+                            <h5 class="card-title">Ticket Generado</h5>
+
+                            <div class="mb-1">
+                                <b>Tipo de atencion:</b> @ViewBag.Meeting.TypeAttention.Name
+                                <br />
+                                <b>Hora generada:</b> @ViewBag.Meeting.Created.ToString("yyyy-MM-dd HH:mm")
+                                <br />
+                                <b>Número de orden:</b> @ViewBag.Meeting.Number
+                            </div>
+                            <a href="/Client/CancelarCita?UniqueId=@ViewBag.Meeting.UniqueId" class="btn btn-sm btn-danger" onclick="clicked();">Cancelar Ticket</a>
+                            <input type="hidden" id="UniqueId" value="@ViewBag.Meeting.UniqueId" />
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <h5 style="text-align: center;" class="card-title">Ticket en espera</h5>
+                            <h1 style="text-align: center;">@ViewBag.MeetingCount</h1>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (ViewBag.MeetingAtencion != null)
+            {
+                <div class="card border-light mt-3 ">
+                    <div class="card-body">
+                        <h5 class="card-title">Atencion en proceso</h5>
+
+                        <div class="mb-1">
+                            <b>Tipo de atencion:</b> @ViewBag.MeetingAtencion.TypeAttention.Name
+                            <br />
+                            <b>Hora generada:</b> @ViewBag.MeetingAtencion.Created.ToString("yyyy-MM-dd HH:mm")
+                            <br />
+                            <b>Número de orden:</b> @ViewBag.MeetingAtencion.Number
+                        </div>
+                        <a href="/Client/Meeting?UniqueId=@ViewBag.MeetingAtencion.UniqueId" class="btn btn-sm btn-success">Unirse a la reuinión</a>
+                        <input type="hidden" id="UniqueId" value="@ViewBag.MeetingAtencion.UniqueId" />
+                    </div>
+                </div>
+            }
+
+
+            @if (ViewBag.Meeting != null)
+            {
+                <div class="card  border-light mt-3" style="display:none;">
+                    <div class="card-body text-center">
+                        Tiempo estimado de espera aproximado
+                        <br /><br />
+                        <div>
+                            @{
+                                TimeSpan diferencia = DateTime.Now.Subtract(ViewBag.Meeting.Created);
+                                var secondstr = "";
+                                var second = diferencia.TotalMinutes - Math.Floor(diferencia.TotalMinutes);
+                                second = 60 - Math.Floor(second * 60);
+                                //var second = Convert.ToInt32((diferencia.TotalMinutes - Convert.ToInt32(diferencia.TotalMinutes)) * 60);
+                                if (second < 0) secondstr = "00";
+                                if (second < 10) { secondstr = "0" + second.ToString(); }
+                                else { secondstr = second.ToString(); }
+
+                                var minutes = 25 - Math.Floor(diferencia.TotalMinutes);
+
+                                if (minutes < 0)
+                                {
+                                    minutes = 0;
+                                    secondstr = "00";
+                                }
+
+                            }
+                            <span id="jqcd_count">@minutes:@secondstr</span><br>
+                            <input type="hidden" id="jqcd_time" value="@minutes:@secondstr" />
+                            <!--<input type="button" id="jqcd_start" value="Start" onClick="jqcd('start')" />
+                            <input type="button" id="jqcd_stop" value="Stop" onClick="jqcd('stop')" />
+                            <input type="button" id="jqcd_reset" value="Reset" onClick="jqcd('reset')" /><br><br>
+
+                            <br>-->
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+    <style>
+        span#jqcd_count {
+            font-size: 54pt;
+            font-weight: bold;
+        }
+
+        /*input#jqcd_start,
+        input#jqcd_stop,
+        input#jqcd_reset {
+            font-size: 12pt;
+            font-weight: bold;
+        }
+
+        input#jqcd_start,
+        input#jqcd_stop,
+        input#jqcd_reset {
+            width: 100px;
+        }
+
+        span#jqcd_count {
+            font-family: "Lucida Console", Monaco, "Courier New", Courier, monospace !IMPORTANT;
+        }*/
+    </style>
+    <script>
+
+        function clicked() {
+            if (confirm('¿Realmente quieres cancelar tu ticket?')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function valid() {
+            if ($("#TypeAttentionId").val() == null) {
+                alert("Seleccione tipo de atención");
+                return false;
+            }
+            return true;
+        }
+
+        //----------------------------------------------------------------------------------------
+        var connection = new signalR.HubConnectionBuilder().withUrl("/ticketHub").build();
+
+        connection.start().then(function () {
+            console.log("init");
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("InitMeeting", function (UniqueId, PeerManager, sessionId, apiKey, token) {
+            console.log("InitMeeting");
+            console.log($("#UniqueId").val());
+            console.log(UniqueId);
+            console.log(PeerManager);
+            if ($("#UniqueId").val() == UniqueId) {
+
+                window.location.replace("/Client/Meeting?UniqueId=" + UniqueId + "&PeerManager=" + PeerManager + "&sessionId=" + sessionId + "&apiKey=" + apiKey + "&token=" + token);
+            }
+            //GetSalas();
+        });
+
+        //--------------------------------------------------------------------------------------------------------
+
+
+
+        var jqcd_start_id = 'input#jqcd_start';
+        var jqcd_time_id = 'input#jqcd_time';
+        var jqcd_count_id = 'span#jqcd_count';
+        var jqcd_end_message = '';
+
+        var jqcd_countdown = '';
+        var jqcd_status = 'stopped';
+        var jqcd_current = '';
+        function jqcd(action) {
+
+            if (action == 'start') {
+                if (jqcd_status == 'stopped') {
+                    jqcd_updtv(jqcd_start_id, 'Pause');
+                    jqcd_status = 'running';
+                    jqcd_current = jqcd_countdown;
+                    jqcd_updtt(jqcd_count_id, jqcd_countdown);
+                }
+                else if (jqcd_status == 'running') {
+                    jqcd_updtv(jqcd_start_id, 'Resume');
+                    jqcd_status = 'paused';
+                }
+                else if (jqcd_status == 'paused') {
+                    jqcd_updtv(jqcd_start_id, 'Pause');
+                    jqcd_status = 'running';
+                }
+            }
+            else if (action == 'stop') {
+                jqcd_updtv(jqcd_start_id, 'Start');
+                jqcd_status = 'stopped';
+                jqcd_updtt(jqcd_count_id, jqcd_end_message);
+            }
+            else if (action == 'reset') {
+                jqcd_updtv(jqcd_start_id, 'Start');
+                jqcd_status = 'stopped';
+                jqcd_updtt(jqcd_count_id, jqcd_countdown);
+            }
+
+            var a = jqcd_current.split(":");
+            var m = a[0];
+            var s = (a[1] - 1);
+
+            if (s < 0) {
+                if (parseInt(m) == 0) {
+                    jqcd_updtv(jqcd_start_id, 'Start');
+                    jqcd_status = 'stopped';
+                    jqcd_updtt(jqcd_count_id, jqcd_end_message);
+                }
+                else {
+                    m = m - 1;
+                    s = 59;
+                }
+            }
+
+            if (s >= 0) {
+                setTimeout(function () {
+                    if (jqcd_status == 'running') {
+                        m = (parseInt(m) < 10) ? "0" + parseInt(m) : m;
+                        s = (parseInt(s) < 10) ? "0" + parseInt(s) : s;
+                        jqcd_updtt(jqcd_count_id, m + ":" + s);
+                        jqcd_current = m + ":" + s;
+                        jqcd('');
+                    }
+                }, 1000);
+            }
+        }
+
+        function jqcd_updtv(selector, value) {
+            if (selector != '') {
+                $(selector).val(value);
+            }
+        }
+        function jqcd_updtt(selector, value) {
+            if (selector != '') {
+                $(selector).text(value);
+            }
+        }
+
+        $(document).ready(function () {
+            jqcd_countdown = $(jqcd_time_id).val();
+            jqcd_updtt(jqcd_count_id, jqcd_countdown);
+
+            $(jqcd_time_id).keyup(function () {
+                jqcd_countdown = $(jqcd_time_id).val();
+                jqcd_updtt(jqcd_count_id, jqcd_countdown);
+                jqcd_updtv(jqcd_start_id, 'Start');
+                jqcd_status = 'stopped';
+            });
+
+
+            if ($("#UniqueId").val() != null) {
+                $("#divLeft").show();
+                jqcd('start');
+            }
+
+        });
+
+    </script>
+} 

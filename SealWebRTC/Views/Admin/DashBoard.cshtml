@@ -1,0 +1,275 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+
+    var atencionesSuma = 0;
+    var tickets = 0;
+    var Programadas = 0;
+
+    var clientes = 0;
+    var gestores = 0;
+    var admin = 0;
+}
+
+<table id="users" style="display:none">
+    <tbody>
+        @foreach (KeyValuePair<int, int> item in ViewBag.Users)
+        {
+
+            if (item.Key == 1)
+            {
+                clientes = item.Value;
+            }
+            if (item.Key == 2)
+            {
+                gestores = item.Value;
+            }
+            if (item.Key == 3)
+            {
+                admin = item.Value;
+            }
+            <tr>
+                <td>@item.Key</td>
+                <td>@item.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table id="atenciones" style="display:none">
+    <tbody>
+        @foreach (KeyValuePair<int, int> item in ViewBag.atenciones)
+        {
+            atencionesSuma = atencionesSuma + item.Value;
+            if (item.Key == 1)
+            {
+                tickets = item.Value;
+            }
+            if (item.Key == 2)
+            {
+                Programadas = item.Value;
+            }
+            <tr>
+                <td>@item.Key</td>
+                <td>@item.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table id="AtencionTypeDic" style="display:none">
+    <tbody>
+        @foreach (KeyValuePair<String, int> item in ViewBag.AtencionTypeDic)
+        {
+            <tr>
+                <td>@item.Key</td>
+                <td>@item.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="section section-lg ">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-3 mb-4">
+                <div class="card border-light">
+                    <div class="card-body d-block d-md-flex align-items-center">
+                        <div class="icon icon-shape icon-md icon-shape-primary rounded-circle">
+                            <span class="fas fa-video"></span>
+                        </div>
+                        <div class="text-right">
+                            <span class="d-block h6 font-weight-normal">Atenciones</span>
+                            <h5 class="h3 font-weight-bold mb-1">@atencionesSuma</h5>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-3 mb-4">
+                <div class="card border-light">
+                    <div class="card-body d-block d-md-flex align-items-center">
+                        <div class="icon icon-shape icon-md icon-shape-primary rounded-circle">
+                            <span class="fas fa-users"></span>
+                        </div>
+                        <div class="text-right">
+                            <span class="d-block h6 font-weight-normal">Clientes</span>
+                            <h5 class="h3 font-weight-bold mb-1">@clientes</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-3 mb-4">
+                <div class="card border-light">
+                    <div class="card-body d-block d-md-flex align-items-center">
+                        <div class="icon icon-shape icon-md icon-shape-primary rounded-circle">
+                            <span class="fas fa-user-cog"></span>
+                        </div>
+                        <div class="text-right">
+                            <span class="d-block h6 font-weight-normal">Gestores</span>
+                            <h5 class="h3 font-weight-bold mb-1">@gestores</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-3 mb-4">
+                <div class="card border-light">
+                    <div class="card-body d-block d-md-flex align-items-center">
+                        <div class="icon icon-shape icon-md icon-shape-primary rounded-circle">
+                            <span class="fas fa-user-shield"></span>
+                        </div>
+                        <div class="text-right">
+                            <span class="d-block h6 font-weight-normal">Administradores</span>
+                            <h5 class="h3 font-weight-bold mb-1">@admin</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card border-light">
+                    <div class="card-body ">
+                        <div class="mb-3">
+                            <span class="h6">Ticket / Programada</span>
+                        </div>
+                        <canvas id="myChart1" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card border-light">
+                    <div class="card-body ">
+                        <div class="mb-4">
+                            <span class="h6">Tipo atención</span>
+                        </div>
+                        <canvas id="myChart2" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card border-light">
+                    <div class="card-body ">
+                        <table id="" class="table table-sm">
+                            <tbody>
+                                @foreach (KeyValuePair<int, int> item in ViewBag.atenciones)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (item.Key == 1)
+                                            {
+                                                <span>Tickets</span>
+                                            }
+                                            else if (item.Key == 2)
+                                            {
+                                                <span>Programadas</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">@item.Value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card border-light">
+                    <div class="card-body ">
+                        <table id="" class="table table-sm">
+                            <tbody>
+                                @foreach (KeyValuePair<String, int> item in ViewBag.AtencionTypeDic)
+                                {
+                                    <tr>
+                                        <td>@item.Key</td>
+                                        <td class="text-center">@item.Value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="~/lib/chartjs/chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart1').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tickets', 'Programadas'],
+                datasets: [{
+                    label: '#',
+                    data: [@tickets, @Programadas],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+
+        var labels = [];
+        var data = [];
+        var colors = [];
+        $('#AtencionTypeDic > tbody  > tr').each(function (index, tr) {
+            labels.push($($(tr).children()[0]).html());
+            data.push($($(tr).children()[1]).html());
+            colors.push(dynamicColors());
+        });
+
+
+
+        var myChart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# Atenciones',
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                layout: {
+                    padding: {
+                        left: 50,
+                        right: 0,
+                        top: 0,
+                        bottom: 0
+                    }
+                }
+                
+            }
+        });
+
+        myChart2.options.plugins.legend.position = 'right';
+        //myChart2.options.plugins.legend.display = false;
+        myChart2.update();
+
+       function dynamicColors() {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+            return "rgb(" + r + "," + g + "," + b + ")";
+        }
+
+    </script>
+}

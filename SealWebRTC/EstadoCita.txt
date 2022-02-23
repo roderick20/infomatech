@@ -1,0 +1,6 @@
+﻿                           Ticket           CitaProgramada
+Cuando se crea               1                     0
+Para ser atendida            1                     1
+Reunion iniciada             2                     2
+Terminada                    3                     3
+Cancelada                    4                     4

@@ -1,0 +1,372 @@
+﻿@{
+    ViewData["Title"] = "Registro";
+    Layout = "_LayoutPublic";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card overflow-hidden">
+            <div class="row g-0">
+                <div class="col-lg-6">
+                    <div class=" p-4">
+                        <div id="example-div" class=" d-block d-lg-none  d-flex aligns-items-center justify-content-center">
+                            <img src="~/theme/assets/img/logo_seal.png" id="logo-principal" class="img-fluid" width="50%" />
+                        </div>
+                        <div class=" ">
+                            @if (ViewData["Save"] != null)
+                            {
+                                <h4>Su registro ha sido grabado en breve se le enviara un correo para la confirmación.</h4>
+                                <a href="/Login" class="btn btn-primary">Inicio</a>
+                            }
+                            else
+                            {
+                                <div class="text-center text-md-center mb-4 mt-md-0">
+                                    <h2 class="mb-0 h3">Crear cuenta</h2>
+                                </div>
+                                <form asp-action="Register" id="formRegistro">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 mb-1">
+                                            <label for="TypeDoc" style="margin-bottom:0px;">Documento <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <select class="form-select" id="TypeDoc" name="TypeDoc" aria-label="Example select with button addon">
+                                                    <option value="DNI">DNI</option>
+                                                    <option value="CE">CE</option>
+                                                </select>
+                                                <input type="text" class="form-control" id="NumberDoc" name="NumberDoc" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6  col-12 mb-1" style="margin-bottom:0px;"></div>
+                                        <div class="col-lg-6  col-12 mb-1" style="margin-bottom:0px;">
+                                            <label for="FirstName" style="margin-bottom:0px;">Nombres <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+
+                                        </div>
+                                        <div class="col-lg-6  col-12 mb-1" style="margin-bottom:0px;">
+
+                                            <label for="LastName" style="margin-bottom:0px;">Apellidos <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="LastName" name="LastName" required />
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6  col-12 mb-1">
+                                            <div class="form-group">
+                                                <label for="email" style="margin-bottom:0px;">Correo electrónico <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="email" class="form-control" placeholder="" id="email" name="Email" required="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6  col-12 mb-1">
+                                            <div class="form-group">
+                                                <label for="password" style="margin-bottom:0px;">Contraseña<span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="password" placeholder="mínimo 8 caracteres" class="form-control" id="password" name="password" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6  col-12 mb-1">
+                                            <label for="LastName" style="margin-bottom:0px;">Teléfono(054 + Nro.)/Celular</label>
+                                            <input type="text" class="form-control" id="Phone" name="Phone" required maxlength="12" />
+                                        </div>
+                                        <div class="col-lg-6  col-12 mb-1">
+                                            <label for="LastName" style="margin-bottom:0px;">Número de suministro</label>
+                                            <input type="text" class="form-control" id="Suministro" name="Suministro" />
+                                        </div>
+                                        <div class="col-12 mb-1">
+                                            <div class="form-group">
+                                                <label for="password_confirm" style="margin-bottom:0px;">Código captcha <span class="text-danger">*</span></label>
+
+                                                <div class="input-group ">
+                                                    <input type="text" class="form-control" placeholder="Ingrese código" name="captchaCode" maxlength="4" style="text-transform: uppercase" required />
+                                                    <div class="input-group-prepend">
+                                                        <img id="img-captcha" src="/get-captcha-image" style="height: 2.4rem !important;" />
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span id="img-captcha-b" class="btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                            <svg style="color: white; height: .875rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt" class="svg-inline--fa fa-sync-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"></path></svg>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-1">
+                                            <label for="password" style="margin-bottom:0px;"><span class="text-danger">* Campos obligatorios</span></label>
+                                            <div class="form-check">
+
+                                                <input class="form-check-input" type="checkbox" value="" id="terms" required style="margin-top: 4px;">
+                                                <label class="form-check-label" for="terms">
+                                                    Estoy de acuerdo con los <a href="#"
+                                                                                data-bs-toggle="modal" data-bs-target="#modal-default"><u>términos y condiciones</u></a>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <a class="btn btn-primary" href="/Login">
+                                                <svg style="color: white; height: .875rem; margin-bottom: 0.2rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-left" class="svg-inline--fa fa-arrow-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path></svg>
+                                                Regresar
+                                            </a>
+
+                                        </div>
+                                        <div class="col-6 text-end">
+
+                                            <button type="submit" class="btn btn-primary">
+                                                <svg style="color: white; height: 0.875rem; margin-bottom: 0.2rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="save" class="svg-inline--fa fa-save fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V163.882a48 48 0 0 0-14.059-33.941zM224 416c-35.346 0-64-28.654-64-64 0-35.346 28.654-64 64-64s64 28.654 64 64c0 35.346-28.654 64-64 64zm96-304.52V212c0 6.627-5.373 12-12 12H76c-6.627 0-12-5.373-12-12V108c0-6.627 5.373-12 12-12h228.52c3.183 0 6.235 1.264 8.485 3.515l3.48 3.48A11.996 11.996 0 0 1 320 111.48z"></path></svg>
+                                                Registrarse
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6" style="">
+                    <div class="p-lg-5 p-4  h-100 d-none d-lg-block  img-thumbnail">
+                        <img src="~/theme/assets/img/logo_seal.png" id="logo-principal" class="img-fluid" style="margin-top:70px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-default" tabindex="-1" aria-labelledby="modal-default" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title">Términos y condiciones</h2>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p align="justify">                <p align="justify"><b>TÉRMINOS Y CONDICIONES PARA VIDEOLLAMADAS</b></p>
+                <p align="justify"><b> I.	Condiciones Generales</b></p>
+
+
+                <p align="justify">
+                    El acceso y uso del Sistema Web de Video Gestión se encuentra regulado por los términos y condiciones descritos a
+                    continuación (en adelante, los “Términos y Condiciones”), así como por la Norma Técnica de Calidad de los Servicios
+                    Eléctricos aprobada por Decreto Supremo N° 020-97-EM y las leyes y normas que resulten aplicables.
+                </p>
+                <p align="justify">
+                    En consecuencia, las transacciones electrónicas que se realicen en este sitio, así como sus efectos legales y jurídicos,
+                    quedan sujetos las  reglas y acuerdos establecidos en el presente documento y sometidos a la legislación peruana.
+                </p><p align="justify">
+                    El Servicio está disponible para clientes / usuarios / terceros con legítimo interés (en adelante, el “Usuario”)
+                    que deseen iniciar un proceso de compra de nuevos suministros y/o alguno de los servicios vinculados a este,
+                    así como facilidades de pago y generación de reclamos.
+
+                </p><p align="justify">
+                    Los usuarios quedarán  sujetos a los Términos y Condiciones  desde el momento de su registro.
+                </p><p align="justify">
+                    Los Términos y Condiciones  establecidos en el presente documento se entenderán y aplicarán a todas las transacciones que sean realizadas en este sitio web, entre el Usuario y SEAL.
+
+                </p><p align="justify">
+                    El Usuario declara y garantiza estar apto y tener capacidad legal para aceptar los presentes Términos y Condiciones, y que toda la información que proporcione a SEAL en el marco del presente Servicio, bajo cualquier forma, será exacta, verdadera, completa y correcta; liberando de cualquier responsabilidad sobre el particular a SEAL.
+                </p><p align="justify">
+                    Es requisito para poder hacer uso del servicio, la aceptación de los Términos y Condiciones descritos a continuación:
+
+                    Cualquier Usuario que realice una transacción electrónica de registro de solicitud y posterior pago utilizando el Servicio, declara y reconoce, por el solo hecho de registrarse, que conoce y acepta todos y cada uno de los Términos y Condiciones descritos en el presente documento.
+
+                </p><p align="justify">SEAL se reserva el derecho de actualizar y/o modificar los Términos y Condiciones que se detallan a continuación, en cualquier momento, sin previo aviso, en virtud de los cambios regulatorios y tecnológicos que sean aplicables. Es por ello que se recomienda al Usuario leer y revisar los Términos y Condiciones en cada oportunidad que desee utilizar este sitio. </p><p align="justify">
+                    Dichos cambios serán de aplicación desde la fecha en la cual sean publicados en la página institucional de SEAL.
+
+
+
+
+                    SEAL realizará su mejor y mayor esfuerzo para asegurar la disponibilidad y continuidad del Servicio en su sitio web, sin interrupciones ni errores en el acceso al registro y los contenidos, transmisión de información u otro que pudiera tener lugar; sin embargo, debido a la naturaleza misma de internet, no es posible garantizar tales extremos.
+                </p><p align="justify">
+                    En ese sentido, SEAL no será responsable contractual ni extracontractualmente, por ningún daño directo o indirecto, resultante de la no disponibilidad y/o continuidad del Servicio, así como de la suplantación de identidad del Usuario, o de cualquier otro daño que pudiese ocurrir durante la utilización del Servicio o como consecuencia del uso del mismo.
+
+                    Sin perjuicio de ello, en casos de interrupciones del servicio, SEAL procurará restablecer el servicio con la mayor celeridad posible, sin que por ello pueda imputársele algún tipo de responsabilidad.
+                    Así también el acceso al servicio podría, eventual u ocasionalmente, verse suspendido o restringido a consecuencia de determinados trabajos de mantenimiento, reparación y/o la introducción de nuevos productos o servicios. En tales casos, SEAL procurará limitar la regularidad y duración de tales suspensiones y/o restricciones y dar el previo aviso correspondiente.
+
+                </p><p align="justify">
+
+                    SEAL no responderá por los perjuicios ocasionados al Usuario del Servicio, provenientes del uso inadecuado de las tecnologías puestas a disposición de este, cualquiera sea la forma en la cual se utilicen inadecuadamente éstas tecnologías.
+
+                    El USUARIO acepta y da consentimiento libre, previo, expreso, inequívoco e informado para que SEAL sea el único responsable del tratamiento, uso y almacenamiento de todo tipo de información brindada por el USUARIO, incluyendo sus datos personales.
+
+                </p><p align="justify">
+
+                    Esta aceptación además tiene como finalidad el envío de información comercial al USUARIO, el mantenimiento de la relación contractual y de gestión con SEAL y la transferencia de sus datos personales a terceros, siempre que sea necesaria su participación para la prestación de los Servicios que brinda SEAL.
+
+
+                </p><p align="justify">
+
+                    SEAL garantiza el derecho fundamental a la protección de datos personales facilitados por el USUARIO, a través de su adecuado tratamiento, en un marco de respeto de los derechos fundamentales reconocidos, de acuerdo con la Constitución Política del Perú, la Ley de Protección de Datos Personales, Ley N° 29733, y su Reglamento, Decreto Supremo N° 003-2013-JUS, así como las normas legales aplicables.
+
+
+
+                </p>
+                <p align="justify"><b>II.	Registro de la Solicitud para Videollamada</b></p>
+                <p align="justify">
+                    Para realizar la generación de un ticket de una solicitud el Usuario deberá definir el tipo de atención que requiere. De acuerdo con ello,
+                    se le desplegarán una serie de opciones que le permitirán elegir el requerimiento que se ajuste a su necesidad, debiendo elegir entre las opciones:
+                    “Facilidades de pago, Generación de reclamo, Generación de solicitud nuevo suministro, Reporte de denuncias, Solicitud de Cambio de Nombre,
+                    Solicitud de cambio de potencia, Solicitud de reactivación, Solicitud de reubicación y Subsanación de observaciones”.
+
+                </p><p align="justify">
+                    Para programar una cita el usuario deberá seleccionar un día y una hora (de lunes a viernes desde las 09:00 a 17:00 horas), luego de realizar su elección le aparecerá un dialogo donde podrá seleccionar el tipo de atención. Las citas se programan desde el día siguiente y son limitadas.
+
+                </p><p align="justify">
+                    El Usuario tendrá exclusiva responsabilidad por la veracidad y precisión de los datos que haya consignado en la interacción usuario-gestor, debiendo asumir las consecuencias legales por cualquier información falsa o fraudulenta. SEAL queda excluida de cualquier responsabilidad por el uso indebido de datos o cualquier acto que pueda perjudicar al Usuario y/o a un tercero por el uso indebido de información generada para su registro y seguimiento.
+
+
+
+                </p><p align="justify"><b>III.	Derechos del Usuario</b></p>
+                <p align="justify">
+                    El Usuario cuenta con todos los derechos reconocidos por la legislación de protección al consumidor vigente en el territorio del Perú, además de los que le otorgan los presentes Términos y Condiciones. El solo hecho de visitar este sitio en el cual es posible registrar una solicitud, no impone al Usuario obligación alguna, a menos que de forma inequívoca haya aceptado las condiciones, en la forma indicada en estos Términos y Condiciones.
+                </p>
+                <p align="justify">
+                    <b>
+                        IV.	Procedimiento para hacer uso del servicio
+                    </b>
+                </p>
+                <p align="justify">
+                    En primer lugar, el Usuario deberá ingresar a la página web de SEAL: https://www.seal.com.pe/. Cuando ingrese a dicho entorno, deberá ubicar el botón “Videollamada”, una vez en ella deberá llenar el formulario de Registro (necesariamente debe consignar Número de Documento de Identidad/Carnet de Extranjería, Nombre, Apellidos, Correo Electrónico, Contraseña y aceptar los Términos y Condiciones.
+                </p>
+
+                <p align="justify"><b> V.	Medios de Notificación</b></p>
+                <p align="justify">
+                    El Usuario autoriza expresamente a SEAL para que todos los actos derivados de la atención de su solicitud, que se emitan respecto de la entidad que representa o a nombre propio, le sean notificados en el correo electrónico que el usuario haya registrado en el formulario inicial, conforme a lo establecido en el numeral 20.4 del artículo 20 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado mediante Decreto Supremo N° 004-2019-JUS.
+                </p><p align="justify">
+                    A partir de la presente autorización, SEAL queda facultada para remitir vía correo electrónico, todos los documentos emitidos que deban ser objeto de notificación electrónica, en el marco de la atención de la solicitud, independientemente de la etapa de atención en la que se encuentre.
+
+                </p><p align="justify">
+                    El Usuario conoce y acepta que las alertas de notificación respectivas, se envíen al correo electrónico que ha señalado expresa y voluntariamente en su ficha de solicitud.
+
+                </p><p align="justify">
+                    El Usuario conoce y acepta expresamente que se entenderá debidamente notificado desde la fecha y hora en que se acredite el ingreso del documento o comunicación, remitido por SEAL a su correo electrónico; sin perjuicio de su lectura posterior.
+
+                </p><p align="justify">
+                    En tal sentido, El Usuario reconoce expresamente que la notificación electrónica surte efectos legales cuando se deposita en su correo electrónico, con prescindencia de la fecha en que el Usuario haya ingresado a él o dado lectura al acto o comunicación notificada.
+                </p><p align="justify">
+                    El Usuario se hace responsable de adoptar las medidas de seguridad idóneas para la administración de la cuenta de correo electrónico indicada en su solicitud, y de mantener el buzón con la capacidad suficiente para la recepción de las alertas de notificación que envíe SEAL.
+                </p>
+                <p align="justify">
+                    En consecuencia, la omisión en el cumplimiento de dicha obligación por parte del Usuario no invalidará el trámite de notificación  realizada por medios electrónicos. En ese sentido, se recomienda al Usuario revisar diariamente el buzón del correo electrónico indicado en su solicitud a donde se le notificará las comunicaciones relativas a su solicitud o trámite.
+                </p>
+                <p align="justify">
+                    Los actos administrativos objeto de notificación electrónica serán remitidos para su visualización en formato pdf, razón por la cual el Usuario deberá tener instalado en su equipo el software que permita la correcta visualización de las imágenes que remita SEAL.
+
+                </p><p align="justify">
+                    Los términos procesales para todos los efectos empezarán a contarse a partir del día hábil siguiente de la notificación correspondiente.
+
+
+                    <b> </b>
+                <p align="justify"><b>VI.	Costo del Servicio</b></p>
+                <p align="justify">
+                    Las transacciones realizadas en este servicio no generarán costo alguno para el Usuario.
+                </p>
+
+                <p align="justify"><b> VII.	Política de Privacidad</b></p>
+                <p align="justify">
+                    SEAL garantiza la seguridad y confidencialidad en el tratamiento de los datos personales facilitados por el Usuario de conformidad con la Ley de Protección de Datos personales. Sin embargo, el Usuario reconoce que al ingresar la página Web de SEAL, siendo este un servicio que hace uso de Internet, podría estar sujeto a interferencias o violaciones por parte de terceros y a factores externos, por tanto, el Usuario asume los riesgos que de ello pueda derivar, y consiguientemente, libera a SEAL de cualquier responsabilidad generada como consecuencia de dichas interferencias, violaciones o factores externos.
+                </p><p align="justify">
+                    Sin perjuicio de lo anterior, el Usuario otorga su consentimiento a SEAL para que utilice la información proporcionada, única y exclusivamente,  para todos los trámites y procedimientos que la empresa realice  con el objeto de brindar el servicio de distribución de electricidad al Usuario.
+
+
+                </p><p align="justify"><b>VIII.	Principio de Buena Fe</b></p>
+                <p align="justify">
+                    Con la presente aceptación de los Términos y Condiciones  el Usuario manifiesta su conformidad y se somete a la totalidad de disposiciones  establecidas en el presente documento y se compromete a actuar en todo momento bajo los postulados de la buena fe.
+
+
+                </p><p align="justify"><b>IX.	Prohibiciones</b></p>
+                <p align="justify">
+                    No está permitido realizar un uso indebido del servicio, así como del registro de solicitudes en cualquiera de sus etapas, de ser detectado, podrá ser denunciado ante las autoridades competentes y responder por cualquier perjuicio ocasionado.
+
+                </p><p align="justify">
+                    <b>
+                        X.	Suscripción de este acuerdo
+                    </b>
+                </p><p align="justify">
+                    SEAL y el Usuario acuerdan que la aceptación virtual de este documento tendrá la misma validez de la suscripción o firma física del documento.
+                </p><blockquote>
+                    <p align="justify">
+                        “Artículo	20.-	Modalidades	de	Notificación
+                        20.4. La entidad que cuente con disponibilidad tecnológica puede asignar al administrado una casilla electrónica gestionada por esta, para la notificación de actos administrativos, así como actuaciones emitidas en el marco de cualquier actividad administrativa, siempre que cuente con el consentimiento expreso del administrado.
+                    </p><p align="justify">
+                        De conformidad con el artículo 13 de la Ley N° 29733, Ley de protección de datos personales:
+                    </p><p align="justify">
+                        Artículo 13. Alcances sobre el tratamiento de datos personales
+                    </p><p align="justify">
+                        13.1 El tratamiento de datos personales debe realizarse con pleno respeto de los derechos fundamentales de sus titulares y de los derechos que esta Ley les confiere. Igual regla rige para su utilización por terceros. (…)
+                    </p><p align="justify">
+                        13.5 Los datos personales solo pueden ser objeto de tratamiento con consentimiento de su titular, salvo ley autoritativa al respecto. El consentimiento debe ser previo, informado, expreso e inequívoco. (…)”.
+                    </p>
+                </blockquote>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                @*<button type="button" class="btn btn-link text-danger ml-auto" data-dismiss="modal">Close</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#img-captcha-b").click(function () {
+                d = new Date();
+                $("#img-captcha").attr("src", "/get-captcha-image?" + d.getTime());
+            });
+
+
+            //$("#UsrnumeroDocumento").keypress(function (e) {
+            //    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //        $("#errmsg").html("Solo números").show().fadeOut("slow");
+            //        return false;
+            //    }
+            //});
+
+            //$("#formRegistro").submit(function (event) {
+            //    if ($("#UsrtipoDocumento").val() == "DNI") {
+            //        if ($("#UsrnumeroDocumento").val().length != 8) {
+            //            alert("DNI debe tener 8 digitos");
+            //            event.preventDefault();
+            //        }
+            //    }
+            //    if ($("#UsrtipoDocumento").val() == "RUC") {
+            //        if ($("#UsrnumeroDocumento").val().length != 11) {
+            //            alert("RUC debe tener 11 digitos");
+            //            event.preventDefault();
+            //        }
+            //    }
+            //    if ($("#UsrtipoDocumento").val() == "Carnet Extranjeria") {
+            //        if ($("#UsrnumeroDocumento").val().length != 12) {
+            //            alert("Carnet Extranjeria debe tener 12 digitos");
+            //            event.preventDefault();
+            //        }
+            //    }
+
+            //    if (!isEmail($("#UsrcorreoPrimario").val())) {
+            //        alert("Email primario invalido");
+            //        event.preventDefault();
+            //    }
+
+            //    if ($("#UsrcorreoSecundario").val() != "") {
+            //        if (!isEmail($("#UsrcorreoSecundario").val())) {
+            //            alert("Email secundario invalido");
+            //            event.preventDefault();
+            //        }
+            //    }
+
+            //});
+
+        });
+
+                                            //function isEmail(email) {
+                                            //    var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                                            //    return regex.test(email);
+                                            //}
+    </script>
+}

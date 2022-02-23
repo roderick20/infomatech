@@ -1,0 +1,511 @@
+﻿@{
+    Layout = "_LayoutNew";
+
+    var atencionesSuma = 0;
+    var tickets = 0;
+    var Programadas = 0;
+
+    var clientes = 0;
+    var gestores = 0;
+    var admin = 0;
+}
+
+<table id="users" style="display:none">
+    <tbody>
+        @foreach (KeyValuePair<int, int> item in ViewBag.Users)
+        {
+
+            if (item.Key == 1)
+            {
+                clientes = item.Value;
+            }
+            if (item.Key == 2)
+            {
+                gestores = item.Value;
+            }
+            if (item.Key == 3)
+            {
+                admin = item.Value;
+            }
+            <tr>
+                <td>@item.Key</td>
+                <td>@item.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
+
+            <div class="page-title-right">
+                <table>
+                    <tr>
+                        <td><label class="control-label" style="margin-bottom: 0; margin-right: 5px;">Fecha</label></td>
+                        <td>
+                            <div class="form-group">
+
+                                <input class="form-control form-control-sm" id="MeetingDate" name="MeetingDate" style="padding-top: 4px; padding-bottom: 4px; padding-left: .5rem; font-size: .875rem; height: 31px; " value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="loadData()"
+                                    style=" padding-top: 4px;padding-bottom: 4px; padding-left: .5rem;font-size: .875rem;height: 31px;margin-top: 0;font-weight: 300;">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row  mb-1">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="float-end">
+                    <div class="avatar-sm mx-auto mb-4">
+                        <span class="avatar-title rounded-circle bg-light font-size-24">
+                            <i class="fas fa-video text-primary"></i>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-muted text-uppercase fw-semibold">Atenciones</p>
+                    <h4 class="mb-1 mt-1"><span class="counter-value" id="atencionesSuma"></span></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="float-end">
+                    <div class="avatar-sm mx-auto mb-4">
+                        <span class="avatar-title rounded-circle bg-light font-size-24">
+                            <i class="fas fa-users text-success"></i>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-muted text-uppercase fw-semibold">Clientes</p>
+                    <h4 class="mb-1 mt-1"><span class="counter-value2" id="atencionesClientes"></span></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="float-end">
+                    <div class="avatar-sm mx-auto mb-4">
+                        <span class="avatar-title rounded-circle bg-light font-size-24">
+                            <i class="fas fa-user-cog text-success"></i>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-muted text-uppercase fw-semibold">Gestores</p>
+                    <h4 class="mb-1 mt-1"><span class="counter-value2">@ViewBag.Gestores</span></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-end">
+                        <div class="avatar-sm mx-auto mb-4">
+                            <span class="avatar-title rounded-circle bg-light font-size-24">
+                                <i class="fas fa-user-shield text-warning"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-muted text-uppercase fw-semibold" style="font-size: .75rem;">Administradores</p>
+                        <h4 class="mb-1 mt-1"><span class="counter-value">@admin</span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="float-end">
+                    <div class="avatar-sm mx-auto mb-4">
+                        <span class="avatar-title rounded-circle bg-light font-size-24">
+                            <i class="fas fa-star text-primary"></i>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-muted text-uppercase fw-semibold">Puntaje</p>
+                    <h4 class="mb-1 mt-1"><span class="counter-value" id="puntaje">0</span></h4>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+<div class="row ">
+    <div class="col-6">
+        <div class="card border-light">
+            <div class="card-body ">
+                <div class="mb-3">
+                    <span class="h6">Tickets / Citas Programadas</span>
+                </div>
+                <canvas id="myChart1" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card border-light">
+            <div class="card-body ">
+                <div class="mb-4">
+                    <span class="h6">Tipo atención</span>
+                </div>
+                <canvas id="myChart2" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-6">
+        <div class="card border-light">
+            <div class="card-body ">
+                <table id="atenciones" class="table table-sm">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card border-light">
+            <div class="card-body ">
+                <table id="AtencionTypeDic" class="table table-sm">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mt-2">
+        <div class="card border-light">
+            <div class="card-body ">
+                <h5 style="font-size:1rem;">Atenciones del día</h5>
+                <table id="" class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>En Espera</th>
+                            <th>En Reunion</th>
+                            <th>Terminada</th>
+                            <th>Cancelada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center"><span id="En_Espera"></span></td>
+                            <td class="text-center"><span id="En_Reunion"></span></td>
+                            <td class="text-center"><span id="Terminada"></span></td>
+                            <td class="text-center"><span id="Cancelada"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+                <table id="atencionesV" class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Gestor</th>
+                            <th>Cliente</th>
+                            <th>Atención</th>
+                            <th>Tipo</th>
+                            <th>Nro. Atenciones</th>
+                            <th style="display:none;">Estado</th>
+                            <th>Hora de inicio </th>
+                            <th>Tiempo Trancurrido </th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section scripts{
+
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/lib/chartjs/chart.min.js"></script>
+
+    <link href="~/lib/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="~/lib/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+
+    <script>
+
+        $('#MeetingDate').datepicker({
+            language: "es",
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            todayHighlight: true
+        });
+
+        var En_Espera = 0;
+        var En_Reunion = 0;
+        var Terminada = 0;
+        var Cancelada = 0;
+
+        var atencionesSuma = 0;
+        var tickets = 0;
+        var programadas = 0;
+
+        var ctx = document.getElementById('myChart1').getContext('2d');
+        var chart1 = new Chart(ctx, {
+            type: 'bar',
+            data: {}
+        });
+
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var chart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {},
+            options: {}
+        });
+
+        function loadData() {
+            $.ajax({
+                url: "/Admin/GetDash",
+                data: { fecha: $('#MeetingDate').val() },
+                type: "POST",
+                success: function (data) {
+                    $("#puntaje").html(data.puntaje);
+
+                    atencionesSuma = 0;
+                    tickets = 0;
+                    programadas = 0;
+                    $("#atenciones tbody").html('');
+
+                    $.each(data.atenciones, function (index, value) {
+                        atencionesSuma = atencionesSuma + value;
+                        var name = "";
+                        if (index == 1) {
+                            tickets = value;                            
+                        }
+                        if (index == 2 || index == 3) {
+                            programadas = programadas + value;                           
+                        }                       
+                    });
+                    $("#atenciones tbody").append(`<tr><td>Tickets</td><td>${tickets}</td></tr>`);
+                    $("#atenciones tbody").append(`<tr><td>Programadas</td><td>${programadas}</td></tr>`);
+
+                    $("#atencionesClientes").html(atencionesSuma);
+                    $("#atencionesSuma").html(atencionesSuma);
+                    chart1.data = {
+                        labels: ['Tickets', 'Citas Programadas'],
+                        datasets: [{
+                            label: '#',
+                            data: [tickets, programadas],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    };
+                    chart1.update();
+                    //---------------------------------------------------------
+                    var labels = [];
+                    var data1 = [];
+                    var colors = [];
+
+                    $("#AtencionTypeDic tbody").html("");
+                    $.each(data.atencionType, function (index, value) {
+                        console.log(value);
+                        labels.push(value.name);
+                        data1.push(value.count);
+                        colors.push(dynamicColors());
+
+                        $("#AtencionTypeDic tbody").append('<tr>' +
+                            '<td>' + value.name + '</td>' +
+                            '<td>' + value.count + '</td>' +
+                            '<td class="text-right">' + ((parseFloat(value.count) * 100) / parseFloat(data.sum)).toFixed(2) + ' % </td></tr > ');
+                    });
+                    chart2.data = {
+                        labels: labels,
+                        datasets: [{
+                            label: '# Atenciones',
+                            data: data1,
+                            backgroundColor: colors,
+                            borderWidth: 1
+                        }]
+                    };
+                    chart2.options = {
+                        responsive: true,
+                        layout: {
+                            padding: {
+                                left: 50,
+                                right: 0,
+                                top: 0,
+                                bottom: 0
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    };
+                    chart2.update();
+                    //-------------------------------------------------------
+                    $("#atencionesV tbody").html("");
+                    En_Espera = 0;
+                    En_Reunion = 0;
+                    Terminada = 0;
+                    Cancelada = 0;
+                    //puntaje = 0;
+                    cantidad = 0;
+
+                    $.each(data.atencionesV, function (index, value) {
+
+                        switch (value.estado) {
+                            case 1: En_Espera++; break;
+                            case 2: En_Reunion++; break;
+                            case 3: Terminada++; puntaje += parseFloat(value.puntaje); cantidad++; break;
+                            case 4: Cancelada++; break;
+                        }
+
+                        if (value.estado == 2) {
+                            $("#atencionesV tbody").append('<tr>' +
+                                '<td>' + value.gestor + '</td>' +
+                                '<td>' + value.cliente + '</td>' +
+                                '<td>' + value.atencion + '</td>' +
+                                '<td>' + value.tipo + '</td>' +
+                                '<td class="text-center">' + value.cantidad + '</td>+' +
+                                '<td  style="display:none;">' + value.estado + '</td>+' +
+                                '<td class="text-center" >' + value.time2 + '</td>+' +
+                                '<td class="text-center">' + value.time + '</td></tr>'
+                            );
+                        }
+                    });
+
+                    $("#En_Espera").html(En_Espera);
+                    $("#En_Reunion").html(En_Reunion);
+                    $("#Terminada").html(Terminada);
+                    $("#Cancelada").html(Cancelada);
+
+                    /*if (puntaje > 0) {
+                        $("#puntaje").html((puntaje / cantidad).toFixed(2));
+                    }
+                    else {
+                        $("#puntaje").html("0.00");
+                    }*/
+
+                }
+            });
+        }
+
+        loadData();
+
+
+        connection = new signalR.HubConnectionBuilder().withUrl("/DashHub").build();
+
+        connection.start().then(function () {
+            console.log("init");
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("UpdateDash", function () {
+            loadData();
+            console.log("UpdateDash");
+        });
+
+        function dynamicColors() {
+            var r = Math.floor(Math.random() * 255);
+            var g = Math.floor(Math.random() * 255);
+            var b = Math.floor(Math.random() * 255);
+            return "rgb(" + r + "," + g + "," + b + ")";
+        }
+
+
+        String.prototype.toDate = function (format) {
+            var normalized = this.replace(/[^a-zA-Z0-9]/g, '-');
+            var normalizedFormat = format.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
+            var formatItems = normalizedFormat.split('-');
+            var dateItems = normalized.split('-');
+
+            var monthIndex = formatItems.indexOf("mm");
+            var dayIndex = formatItems.indexOf("dd");
+            var yearIndex = formatItems.indexOf("yyyy");
+            var hourIndex = formatItems.indexOf("hh");
+            var minutesIndex = formatItems.indexOf("ii");
+            var secondsIndex = formatItems.indexOf("ss");
+
+            var today = new Date();
+
+            var year = yearIndex > -1 ? dateItems[yearIndex] : today.getFullYear();
+            var month = monthIndex > -1 ? dateItems[monthIndex] - 1 : today.getMonth() - 1;
+            var day = dayIndex > -1 ? dateItems[dayIndex] : today.getDate();
+
+            var hour = hourIndex > -1 ? dateItems[hourIndex] : today.getHours();
+            var minute = minutesIndex > -1 ? dateItems[minutesIndex] : today.getMinutes();
+            var second = secondsIndex > -1 ? dateItems[secondsIndex] : today.getSeconds();
+
+            return new Date(year, month, day, hour, minute, second);
+        };
+
+
+        function updateClocks() {
+            $('#atencionesV > tbody  > tr').each(function (index, tr) {
+
+                if ($(tr).children().eq(6).html() == "2") {
+
+                    var begin = $(tr).children().eq(6).html().toDate("yyyy-mm-dd hh:ii:ss");
+                    var end = new Date()
+                    var delta = Math.abs(end - begin) / 1000;
+                    var days = Math.floor(delta / 86400);
+                    delta -= days * 86400;
+                    var hours = Math.floor(delta / 3600) % 24;
+                    delta -= hours * 3600;
+                    var minutes = Math.floor(delta / 60) % 60;
+                    delta -= minutes * 60;
+                    var seconds = delta % 60;
+                    $(tr).children().eq(7).html((pad(minutes, 2) + ":" + pad(parseInt(seconds), 2)));
+                }
+
+            });
+        }
+        setInterval(updateClocks, 1000);
+
+        function pad(num, size) {
+            num = num.toString();
+            while (num.length < size) num = "0" + num;
+            return num;
+        }
+
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@model SealWebRTC.Models.User
+@{
+    ViewData["Title"] = "Mi Perfil";
+    Layout = "_LayoutClient";
+}
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-light mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title" style="font-size:1rem">Perfil</h4>
+                                    <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem;" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <dl class="row">
+                                    <dt class="col-sm-4">
+                                        Documento
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.TypeDoc) @Html.DisplayFor(model => model.NumberDoc)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        Nombre
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.FirstName)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        Apellido
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.LastName)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        Email
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.Email)
+                                    </dd>
+                                    <dt class="col-sm-4">
+                                        Telefono / Celular
+                                    </dt>
+                                    <dd class="col-sm-8">
+                                        @Html.DisplayFor(model => model.CellPhone)
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   

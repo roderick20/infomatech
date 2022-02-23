@@ -1,0 +1,1 @@
+﻿dotnet ef dbcontext scaffold "Server=localhost;Port=3306;Uid=root;Password=root;Database=webrtc" "Pomelo.EntityFrameworkCore.MySql" -o Models -c EFContext --force

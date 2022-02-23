@@ -1,0 +1,230 @@
+﻿@model IEnumerable<SealWebRTC.Models.Meeting>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutNew";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            @*<div class="card-header border-0 bg-white pt-0">
+                    <div class="post-meta">
+                        <div class="media d-flex align-items-center justify-content-between">
+                            <div class="post-group">
+                                <h4 style="margin-bottom: 0px;">Reporte</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="margin-top: 0px;margin-bottom: 0px;">*@
+            <div class="card-body">
+                <h4 class="card-title mb-4">Reporte</h4>
+
+                <form asp-action="ReportByDateAndUser">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Fecha Inicio</label>
+                                    <input class="form-control form-control-sm" id="MeetingDateBegin" name="MeetingDateBegin" style="padding-top: 4px; padding-bottom: 4px; padding-left: .5rem; font-size: .875rem; height: 31px; " required />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Fecha de Fin</label>
+                                    <input class="form-control form-control-sm" id="MeetingDateEnd" name="MeetingDateEnd" style="padding-top: 4px; padding-bottom: 4px; padding-left: .5rem; font-size: .875rem; height: 31px; " required />
+                                </div>
+                            </td>
+                            <td class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label">Gestor</label>
+                                    <select class="form-control" id="UserManagerId" name="UserManagerId">
+                                        <option value="0" selected="selected" disabled>Todos</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Tipo de atención</label>
+                                    <select class="form-select form-select-sm" id="TypeAttentionId" name="TypeAttentionId">
+                                        <option value="0" selected disabled>Todos</option>
+                                        @foreach (var item in ViewBag.Attentions)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+
+                                <input type="submit" value="Buscar" class="btn btn-sm btn-primary" style="padding-top: 4px;
+                                        padding-bottom: 4px;
+                                        padding-left: .5rem;
+                                        font-size: .875rem;
+                                        height: 31px;
+                                        margin-top: 28px;
+                                        font-weight: 300;
+                                " />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+
+
+                @*<div class="card-body py-4 px-0">
+                        <table id="list" class="table table-sm table-bordered" style="font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Fecha
+                                    </th>
+                                    <th>
+                                        Gestor
+                                    </th>
+                                    <th>
+                                        Cliente
+                                    </th>
+                                    <th>
+                                        Cliente Email
+                                    </th>
+                                    <th>
+                                        Tipo de atención
+                                    </th>
+                                    <th>Ticket / Programada</th>
+                                    <th>Puntaje</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Created.ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            @item.UserManager.FirstName @item.UserManager.LastName
+                                        </td>
+                                        <td>
+                                            @item.UserClient.FirstName @item.UserClient.LastName
+                                        </td>
+                                        <td>
+                                            @item.UserClient.Email
+                                        </td>
+                                        <td>
+                                            @item.TypeAttention.Name
+                                        </td>
+                                        <td>
+                                            @{
+                                                var type = item.Type == 1 ? "Ticket" : "Programada";
+                                            }
+                                            @type
+                                        </td>
+                                        <td class="text-right">
+                                            @{
+                                                var score = ((Convert.ToDouble(item.Score) * 100) / 5).ToString("0.00");
+                                            }
+                                            @item.Score
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id">Detalle</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <link href="~/lib/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="~/lib/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+
+    @*<link href="~/theme/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/theme/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+    <script src="~/theme/select2/js/select2.js"></script>
+    <script src="~/theme/select2/js/i18n/es.js"></script>*@
+
+
+    <link href="~/themeNew/libs/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/themeNew/libs/select2/js/select2.min.js"></script>
+
+
+
+
+
+
+
+
+    <style>
+        /*Posicion del elemento*/
+        .select2-selection__rendered {
+            line-height: 18px !important;
+            padding-top: 7px !important;
+            padding-left: 12px !important;
+        }
+
+        /*Altura del select*/
+        .select2-container .select2-selection--single {
+            height: 31px !important;
+        }
+
+        /*Posicion de la flecha*/
+        .select2-selection__arrow {
+            height: 2rem !important;
+        }
+
+        select[name=TypeAttentionId] {
+            width: 220px !important;
+        }
+    </style>
+
+    @*<link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
+        <script src="~/lib/datatable/datatables.min.js"></script>*@
+
+    <script>
+        $(document).ready(function () {
+
+            $('#MeetingDateBegin').datepicker({
+                language: "es",
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $('#MeetingDateEnd').datepicker({
+                language: "es",
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $("#UserManagerId").select2({
+                language: "es",
+                ajax: {
+                    url: '/Admin/GetGestor',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            //type: 'public',
+                            TypeAttentionId: $("#TypeAttentionId").val()
+                        }
+                        return query;
+                    }
+                }
+            });
+
+            //$('#list').DataTable({
+            //    "language": {
+            //        "url": "/lib/datatable/spanish.json"
+            //    },
+            //});
+        });
+    </script>
+}
