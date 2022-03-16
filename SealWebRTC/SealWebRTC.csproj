@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Views\Client\ResumenPago.cshtml" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
@@ -21,6 +25,7 @@
     <None Include="Views\Client\DocumentosPresentados.cshtml" />
     <None Include="Views\Client\EsperandoCita.cshtml" />
     <None Include="Views\Client\GenerateTicket.cshtml" />
+    <None Include="Views\Client\ResumenPago.cshtml" />
     <None Include="Views\Client\HistorialAtenciones.cshtml" />
     <None Include="Views\Client\Index.cshtml" />
     <None Include="Views\Client\Meeting.cshtml" />
@@ -79,6 +84,7 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="ClosedXML.Extensions.Mvc" Version="0.3.0" />
+    <PackageReference Include="mercadopago-sdk" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<SealWebRTC.Models.Meeting>
+@{
+    ViewData["Title"] = "Historial de atenciones";
+    Layout = "_LayoutClient";
+}
+
+
+<div class="card border-light mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <h4 class="page-title" style="font-size:1rem">Carrito de compras</h4>
+                    <hr style="margin-top: 0.5rem; margin-bottom: 0.5rem;" />
+                </div>
+            </div>
+            <div class="col-9">
+
+                <div class="row">
+                    <div class="col-8">
+
+                        Descripción
+
+                    </div>
+                    <div class="col-4">Precio</div>
+                    <hr>
+
+
+                    @foreach (var item in Model)
+                    {
+
+                        <div class="col-8">
+                            <h5>Tipo de atención: @item.TypeAttention.Name</h5>
+                            <h5>Fecha: @item.MeetingDateBegin.Date @item.MeetingDateBegin.Month @item.MeetingDateBegin.Year</h5>
+                            <h5>Hora Inicio: @item.MeetingDateBegin.Hour : @item.MeetingDateBegin.Minute </h5>
+                            <h5>Hora Fin: @Convert.ToDateTime(item.MeetingDateEnd).Hour : @Convert.ToDateTime(item.MeetingDateEnd).Minute </h5>
+
+                        </div>
+                        <div class="col-4 text-end"> <h5>S/ 30.00</h5></div>
+                        <hr>
+
+                    }
+                    <div class="col-8">
+
+                        <h5></h5>
+
+                    </div>
+                    <div class="col-4 text-end"><h5>Total: S/ 30.00</h5></div>
+                    <hr>
+                    <div class="col-8">
+
+                        
+
+                    </div>
+                    <div class="col-4 text-end"><div class="cho-container"></div></div>
+                </div>
+            </div>
+            <div class="col-3">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+
+<script>
+    // Agrega credenciales de SDK
+    const mp = new MercadoPago("APP_USR-ed60db62-ea09-4e64-bb9a-7e69c6813ef7", {
+      locale: "es-PE",
+    });
+
+    // Inicializa el checkout
+    mp.checkout({
+      preference: {
+        id: "@ViewBag.PreferenceId",
+      },
+      render: {
+        container: ".cho-container", // Indica el nombre de la clase donde se mostrará el botón de pago
+        label: "Pagar", // Cambia el texto del botón de pago (opcional)
+      },
+    });
+</script>
+}

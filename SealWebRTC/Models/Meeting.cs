@@ -31,6 +31,7 @@ namespace SealWebRTC.Models
         public string PeerIdManager { get; set; }
         public string PeerIdCliente { get; set; }
         public float? Score { get; set; }
+        public bool Paid { get; set; }
 
         public virtual Typeattention TypeAttention { get; set; }
         public virtual User UserClient { get; set; }

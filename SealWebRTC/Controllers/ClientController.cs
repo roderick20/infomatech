@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using MercadoPago.Client.Preference;
+using MercadoPago.Config;
+using MercadoPago.Resource.Preference;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -28,7 +31,7 @@ namespace SealWebRTC.Controllers
         private readonly IHostEnvironment _hostEnvironment;
         private readonly IWebHostEnvironment _env;
         private readonly ILogger<ClientController> _logger;
-        
+
 
         public ClientController(EFContext context,
         IHubContext<TicketHub> hubContext,
@@ -70,7 +73,7 @@ namespace SealWebRTC.Controllers
                 m.MeetingDateBegin.Month == DateTime.Now.Month &&
                 m.MeetingDateBegin.Day == DateTime.Now.Day)
                 .CountAsync();
-            
+
             return View(Meetings);
         }
 
@@ -194,7 +197,7 @@ namespace SealWebRTC.Controllers
 
             bool flag = true;
 
-            
+
 
             if (hoy.DayOfWeek == DayOfWeek.Sunday)
             {
@@ -363,6 +366,7 @@ namespace SealWebRTC.Controllers
                 meeting.Created = DateTime.Now;
                 meeting.Type = 2;
                 meeting.Status = (int)StatusMeeting.Programada;
+                meeting.Paid = false;
                 _context.Add(meeting);
                 await _context.SaveChangesAsync();
                 await _dashHub.Clients.All.SendAsync("UpdateDash");
@@ -394,7 +398,7 @@ namespace SealWebRTC.Controllers
                 {
                     _logger.LogError(email.Error);
                 }
-                
+
 
                 return "ok";
             }
@@ -650,7 +654,6 @@ namespace SealWebRTC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("ProgrammerMeeting");
         }
-
         public async Task<ActionResult> EsperandoCita(String UniqueId)
         {
             ViewBag.UniqueId = UniqueId.ToString();
@@ -737,6 +740,64 @@ namespace SealWebRTC.Controllers
             {
                 return true;
             }
+        }
+
+        public async Task<ActionResult> ResumenPago()
+        {
+            int UserId = (int)HttpContext.Session.GetInt32("Id");
+            var meetings = await _context.Meetings.Include(m => m.TypeAttention).Where(m => m.UserClientId == UserId && m.Paid == false).ToListAsync();
+
+            MercadoPagoConfig.AccessToken = "APP_USR-7002185318029757-021717-00586e05949f25e4a246d5ed0379073b-37483918";
+
+
+
+            // Crea el objeto de request de la preference
+            var request = new PreferenceRequest
+            {
+                BackUrls = new PreferenceBackUrlsRequest
+                {
+                    Success = "https://www.tu-sitio/success",
+                    Failure = "http://www.tu-sitio/failure",
+                    Pending = "http://www.tu-sitio/pendings",
+                },
+                AutoReturn = "approved",
+
+                //Payer = payer,
+
+                Items = new List<PreferenceItemRequest>
+    {
+        new PreferenceItemRequest
+        {
+            Title = "Mi producto",
+            Quantity = 1,
+            CurrencyId = "PEN",
+            UnitPrice = 5.00m,
+        },
+    },
+            };
+
+            // Crea la preferencia usando el client
+            var client = new PreferenceClient();
+            Preference preference = await client.CreateAsync(request);
+            ViewBag.PreferenceId = preference.Id;
+
+            return View(meetings);
+
+        }
+
+        public ActionResult Pagar()
+        {
+            return View();
+        }
+
+        public ActionResult PagoOk()
+        {
+            return View();
+        }
+
+        public ActionResult PagoFail()
+        {
+            return View();
         }
     }
 }
